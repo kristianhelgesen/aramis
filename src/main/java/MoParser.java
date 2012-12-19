@@ -33,13 +33,11 @@ class MoParser extends BaseParser<Object> {
     }
     
     Rule TemplatePart() {
-    	
-    	return Optional(	
+    	return FirstOf(	
     				Expression(),
     				Render(),
     				ANY
     	);
-    			
     }
 
     Rule Expression() {
