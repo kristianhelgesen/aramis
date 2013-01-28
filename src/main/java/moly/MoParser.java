@@ -1,3 +1,4 @@
+package moly;
 import org.parboiled.BaseParser;
 import org.parboiled.Parboiled;
 import org.parboiled.Rule;
@@ -11,19 +12,24 @@ import org.parboiled.support.ParsingResult;
 class MoParser extends BaseParser<Object> {
 	
 	public static void main(String[] args) {
-		
-		String input = "asdfasdf {{var}} jkljkljkl";
-		MoParser parser = Parboiled.createParser(MoParser.class);
-		
-		
-		
-		ParsingResult<?> result = new ReportingParseRunner<MoParser>(parser.Template()).run(input);
-		
-		String parseTreePrintOut = ParseTreeUtils.printNodeTree(result);
-		
-		System.out.println(parseTreePrintOut);		
-        
+		try{
+			
+			String input = "asdfasdf{{var}}jkljkljkl";
+			
+			MoParser parser = Parboiled.createParser( MoParser.class);
+			
+			ParsingResult<?> result = new ReportingParseRunner<MoParser>( parser.Template()).run( input);
+			
+			String parseTreePrintOut = ParseTreeUtils.printNodeTree(result);
+			
+			System.out.println(parseTreePrintOut);		        
+		}
+		catch( Exception e) {
+			e.printStackTrace();
+		}
 	}
+	
+	
 
     Rule Template() {
         return Sequence(
@@ -36,19 +42,19 @@ class MoParser extends BaseParser<Object> {
     	return FirstOf(	
     				Expression(),
     				Render(),
-    				ANY
+    				Markup()
     	);
     }
 
     Rule Expression() {
         return Sequence(
-        		"{{",ANY,"}}"
+        		"{{",Variable(),"}}"
         );
     }
     
     Rule Render() {
     	return Sequence(
-        		"[[",ANY,"]]"
+        		"[[",Variable(),"]]"
         );
     }
 
@@ -56,4 +62,11 @@ class MoParser extends BaseParser<Object> {
         return OneOrMore(CharRange('0', '9'));
     }
     
+    Rule Variable() {
+    	return OneOrMore( CharRange('a','z'));
+    }
+    
+    Rule Markup() {
+    	return OneOrMore( CharRange('a','z'));
+    }
 }
