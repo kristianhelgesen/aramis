@@ -26,10 +26,14 @@ public class RenderRenderInstruction implements RenderInstruction {
 		
 		for( String part : description.split(",")){
 			
+			// TODO: Use MVEL to parse setters as well??? setter = value 
+			// eller noe ala: JSON.parse("{" + description + "}");
+			
+			
 			String[] parts = part.split("=");
 			
-			String key = parts[0];
-			String val = parts[1];
+			String key = parts[0].trim();
+			String val = parts[1].trim();
 			
 			if( "id".equals( key)){
 				id = val;
