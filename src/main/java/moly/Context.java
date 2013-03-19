@@ -3,24 +3,7 @@ package moly;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.jexl2.JexlEngine;
-
 public class Context {
-	
-	
-	public static void main( String[] args) {
-		
-		Context context = new Context();
-		
-		
-        JexlEngine jexl = new JexlEngine();
-        
-        
-        System.out.println( "invoke: "+jexl.getProperty( context, "test"));
-        
-	}
-
-	
 	
 	private Context parent;
 	

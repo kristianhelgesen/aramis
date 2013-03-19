@@ -7,7 +7,6 @@ import java.io.OutputStream;
 
 import moly.Context;
 import moly.RenderEngine;
-import moly.ctrl.Image2Controller;
 
 import org.mvel2.MVEL;
 import org.slf4j.Logger;
@@ -15,9 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class MvelRenderInstruction implements RenderInstruction {
 	
-	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger( RenderEngine.class);
-
 	
 	Object compiledExpression; 
 	boolean escape;
