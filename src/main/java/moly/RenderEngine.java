@@ -1,10 +1,9 @@
 package moly;
 
-import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.Map;
 
+import org.mvel2.MVEL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,62 +11,88 @@ public class RenderEngine {
 	
 	private static final Logger logger = LoggerFactory.getLogger( RenderEngine.class);
 	
+	ContentProvider contentProvider;
 	String controllerPackageName;
 	String templatePackageName;
-	
-	Map<String,Template> templates = new HashMap<String,Template>();
-	
+	TemplateFactory templateFactory;
 
-	
-	public RenderEngine( String controllerPackageName, String templatePackageName) {
+
+	public RenderEngine( ContentProvider contentProvider, String controllerPackageName, String templatePackageName) {
+		this.contentProvider = contentProvider;
 		this.controllerPackageName = controllerPackageName;
 		this.templatePackageName = templatePackageName;
+		templateFactory = new TemplateFactory( this, contentProvider, templatePackageName);
 	}
 	
 	
 	public void render ( OutputStream os, Object content, String perspective, Map<String,Object> transferValues){
 		
 		Context templateContext = new Context();
-
+		templateContext.setModel( content);
+		
 		String className = content.getClass().getSimpleName();
 		
+		initController(content, templateContext, className);
+		
+		applyValues( templateContext, transferValues);
+		
+		if( perspective==null) perspective = "";
+		String templateName = className.toLowerCase() + (perspective.length()>0?"-"+perspective:"") + ".moly";
+		Template template = templateFactory.getTemplate( templateName);
+
+		template.apply( os, templateContext);
+		
+		logger.debug("templateName: " + templateName );
+	}
+
+
+	@SuppressWarnings({"unchecked","rawtypes"})
+	private void initController(Object content, Context templateContext,
+			String className) {
 		String controllerClassName = className +"Controller";
 		
 		Object controller = null;
 		try {
-			controller = Class.forName( controllerPackageName + "."+ controllerClassName);
+			String controllerFQName = controllerPackageName + "."+ controllerClassName;
+			Class controllerClass = Class.forName( controllerFQName);
+			controller = controllerClass.newInstance();
+			if( controller instanceof ContentAware) {
+				((ContentAware)controller).setContent(content);
+			}
 		} catch (ClassNotFoundException e) {
 			logger.info( "No controller ({}) found in package {} for model class {} ", controllerClassName, controllerPackageName, className);
+		} catch (InstantiationException e) {
+			logger.error("Error instantiating class",e);
+		} catch (IllegalAccessException e) {
+			logger.error("Error instantiating class",e);
 		}
 		
 		templateContext.setController( controller);
-		
-		String templateName = className.toLowerCase() +".moly";
-		
-		Template template = templates.get( templateName);
-		if( template==null) {
-			template = initTemplate( templateName);
+	}
+	
+
+	private void applyValues(Context templateContext, Map<String, Object> transferValues) {
+
+		for( Map.Entry<String, Object> tv: transferValues.entrySet()) {
+			String transferProperty = tv.getKey();
+			
+			if( templateContext.getController()!=null) {
+				try{
+					MVEL.executeExpression( transferProperty, templateContext.getController());
+					continue;
+				}
+				catch( Exception e){
+					logger.debug("", e);
+				}
+			}
+			
+			templateContext.getParameters().put( transferProperty, tv.getValue());
+
 		}
 		
-		System.out.println("templateName: " + templateName );
-
 	}
 
 	
 
-	private Template initTemplate(String templateName) {
-		TemplateBuilder tb = new TemplateBuilder();
-		Parser smp = new Parser( tb);
-		
-		try {
-			smp.parse( getClass().getResourceAsStream( templatePackageName +"."+ templateName));
-			Template template = tb.getTemplate();
-			templates.put( templateName, template);
-			return template;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
+	
 }

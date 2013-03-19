@@ -1,9 +1,0 @@
-{{ title }}
-
-
-[[ id=image, perspective=inline, width=255 ]]
-
-
-{{ body }}
-
-

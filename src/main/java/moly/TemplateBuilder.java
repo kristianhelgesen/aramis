@@ -1,12 +1,20 @@
 package moly;
 
 import moly.renderinstruction.MvelRenderInstruction;
-import moly.renderinstruction.RenderRenderInstruction;
+import moly.renderinstruction.TemplateRenderInstruction;
 import moly.renderinstruction.TextRenderInstruction;
 
 public class TemplateBuilder implements ParserCallback{
 	
-	private Template template = new Template();
+	Template template = new Template();
+	ContentProvider contentProvider;
+	RenderEngine renderEngine;
+	
+	public TemplateBuilder( RenderEngine renderEngine, ContentProvider contenProvider) {
+		this.renderEngine = renderEngine;
+		this.contentProvider = contenProvider;
+	}
+	
 
 	@Override
 	public void handleUnescapedVariable(String var) {
@@ -27,7 +35,7 @@ public class TemplateBuilder implements ParserCallback{
 
 	@Override
 	public void handleRender(String render) {
-		template.addRenderInstruction( new RenderRenderInstruction(null,null,render));
+		template.addRenderInstruction( new TemplateRenderInstruction(renderEngine,contentProvider,render));
 	}
 
 	@Override

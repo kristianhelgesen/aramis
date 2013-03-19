@@ -16,7 +16,7 @@ public class ExpressionRenderInstruction implements RenderInstruction {
 	}
 
 	@Override
-	public Context apply(OutputStream os, Context context) throws IOException{
+	public Context apply( OutputStream os, Context context) throws IOException{
 		Context localContext = context;
 		
         JexlEngine jexl = new JexlEngine();

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 
+import moly.model.Model1;
 import moly.renderinstruction.MvelRenderInstruction;
 
 import org.junit.Test;

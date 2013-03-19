@@ -6,12 +6,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import moly.Context;
+import moly.RenderEngine;
+import moly.ctrl.Image2Controller;
 
 import org.mvel2.MVEL;
-import org.mvel2.compiler.CompiledExpression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MvelRenderInstruction implements RenderInstruction {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger( RenderEngine.class);
 
+	
 	Object compiledExpression; 
 	boolean escape;
 	
@@ -29,7 +36,8 @@ public class MvelRenderInstruction implements RenderInstruction {
 		try{
 			return MVEL.executeExpression( compiledExpression, context);
 		}
-		catch( Exception ex){
+		catch( Exception e){
+			logger.debug("", e);
 			return null;
 		}
 	}

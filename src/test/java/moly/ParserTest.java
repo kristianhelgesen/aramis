@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 
 import moly.renderinstruction.RenderInstruction;
-import moly.renderinstruction.RenderRenderInstruction;
+import moly.renderinstruction.TemplateRenderInstruction;
 
 import org.junit.Test;
 
@@ -19,7 +19,9 @@ public class ParserTest {
 //		String test = "asdfasdf {{test}} [[id to render]] asdf";
 		String test = "asdfasdf asdf";
 		
-		TemplateBuilder tb = new TemplateBuilder();
+		ContentProvider cp = new MockContentProvider();
+		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
+		TemplateBuilder tb = new TemplateBuilder( renderEngine, cp);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));
@@ -38,7 +40,9 @@ public class ParserTest {
 //		String test = "asdfasdf {{test}} [[id to render]] asdf";
 		String test = "{{test}}";
 		
-		TemplateBuilder tb = new TemplateBuilder();
+		ContentProvider cp = new MockContentProvider();
+		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
+		TemplateBuilder tb = new TemplateBuilder( renderEngine, cp);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));
@@ -61,7 +65,9 @@ public class ParserTest {
 		
 		String test = "xxxx [[ id=123 , perspective='test', count=4 ]] yyyy";
 		
-		TemplateBuilder tb = new TemplateBuilder();
+		ContentProvider cp = new MockContentProvider();
+		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
+		TemplateBuilder tb = new TemplateBuilder( renderEngine, cp);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));
@@ -72,7 +78,7 @@ public class ParserTest {
 		
 		RenderInstruction ri = template.getRenderInsturctions().get(1);
 		
-		assertEquals( RenderRenderInstruction.class, ri.getClass());
+		assertEquals( TemplateRenderInstruction.class, ri.getClass());
 		
 		
 	}
