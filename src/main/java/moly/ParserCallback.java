@@ -15,5 +15,8 @@ public interface ParserCallback {
 	public void handleInvertedSectionStart(String string);
 
 	public void handleSectionEnd(String string);
+	
+//	public void handleDecoratorStart( String decoratorName);
+	
 
 }

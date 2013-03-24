@@ -65,6 +65,7 @@ public class RenderTest {
 		assertEquals( "<img id='image1' src='http://images/image1' />", baos.toString().trim());
 	
 	}
+	
 
 	public static void main(String[] args) {
 		Image2Controller ctrl = new Image2Controller();
@@ -72,6 +73,16 @@ public class RenderTest {
 		
 		Object compiledExpression = MVEL.compileExpression("src"); 
 		System.out.println( MVEL.executeExpression( compiledExpression, ctrl));
+		
+		ContentProvider cp = new MockContentProvider();
+		RenderEngine renderEngine = new RenderEngine( cp, "moly.ctrl", "/moly/templates");
+
+		System.out.println("start");
+		for( int i=0; i<100000; i++){
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			renderEngine.render( baos, new Image2(), "", new HashMap<String,Object>());
+		}
+		System.out.println("done");
 		
 
 	}
