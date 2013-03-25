@@ -31,19 +31,20 @@ public class Template {
 
 	public void addRenderInstruction(RenderInstruction renderInstruction) {
 		ri.add( renderInstruction);
-		addRenderInstructionToSectionList( renderInstruction);
+		
+		if( sectionName!=null) {
+			addRenderInstructionToSectionList( renderInstruction);
+		}
+
 	}
 
-	private void addRenderInstructionToSectionList(
-			RenderInstruction renderInstruction) {
-		if( sectionName!=null) {
-			List<RenderInstruction> sri = sectionRenderInstructions.get(sectionName);
-			if( sri==null) {
-				sri = new LinkedList<RenderInstruction>();
-				sectionRenderInstructions.put( sectionName, sri);
-			}
-			sri.add( renderInstruction);
+	private void addRenderInstructionToSectionList( RenderInstruction renderInstruction) {
+		List<RenderInstruction> sri = sectionRenderInstructions.get(sectionName);
+		if( sri==null) {
+			sri = new LinkedList<RenderInstruction>();
+			sectionRenderInstructions.put( sectionName, sri);
 		}
+		sri.add( renderInstruction);
 	}
 	
 	
