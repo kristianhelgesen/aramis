@@ -6,11 +6,12 @@ import moly.renderinstruction.TextRenderInstruction;
 
 public class TemplateBuilder implements ParserCallback{
 	
-	Template template = new Template();
+	Template template;
 	ContentProvider contentProvider;
 	RenderEngine renderEngine;
 	
-	public TemplateBuilder( RenderEngine renderEngine, ContentProvider contenProvider) {
+	public TemplateBuilder( String templateName, RenderEngine renderEngine, ContentProvider contenProvider) {
+		this.template = new Template( templateName);
 		this.renderEngine = renderEngine;
 		this.contentProvider = contenProvider;
 	}

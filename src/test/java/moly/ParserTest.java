@@ -21,7 +21,7 @@ public class ParserTest {
 		
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
-		TemplateBuilder tb = new TemplateBuilder( renderEngine, cp);
+		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));
@@ -42,7 +42,7 @@ public class ParserTest {
 		
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
-		TemplateBuilder tb = new TemplateBuilder( renderEngine, cp);
+		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));
@@ -67,7 +67,7 @@ public class ParserTest {
 		
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
-		TemplateBuilder tb = new TemplateBuilder( renderEngine, cp);
+		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));

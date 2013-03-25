@@ -17,7 +17,7 @@ public class TemplateTest {
 	@Test
 	public void testExpression() throws Exception{
 	
-		Template t = new Template();
+		Template t = new Template("test");
 		t.addRenderInstruction( new MvelRenderInstruction( "m1"));
 		t.addRenderInstruction( new MvelRenderInstruction( "m2"));
 		

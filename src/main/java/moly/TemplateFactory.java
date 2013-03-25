@@ -31,7 +31,7 @@ public class TemplateFactory {
 	}
 	
 	private Template initTemplate(String templateName) {
-		TemplateBuilder tb = new TemplateBuilder( renderEngine, contentProvider);
+		TemplateBuilder tb = new TemplateBuilder( templateName, renderEngine, contentProvider);
 		Parser smp = new Parser( tb);
 		
 		try {
