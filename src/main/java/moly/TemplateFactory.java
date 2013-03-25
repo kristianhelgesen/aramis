@@ -30,7 +30,7 @@ public class TemplateFactory {
 		return template;
 	}
 	
-	private Template initTemplate(String templateName) {
+	private Template initTemplate( String templateName) {
 		TemplateBuilder tb = new TemplateBuilder( templateName, renderEngine, contentProvider);
 		Parser smp = new Parser( tb);
 		

@@ -7,8 +7,10 @@ import moly.renderinstruction.TextRenderInstruction;
 public class TemplateBuilder implements ParserCallback{
 	
 	Template template;
+	String decorateSectionName;
 	ContentProvider contentProvider;
 	RenderEngine renderEngine;
+	
 	
 	public TemplateBuilder( String templateName, RenderEngine renderEngine, ContentProvider contenProvider) {
 		this.template = new Template( templateName);
@@ -19,24 +21,24 @@ public class TemplateBuilder implements ParserCallback{
 
 	@Override
 	public void handleUnescapedVariable(String var) {
-		template.addRenderInstruction( new MvelRenderInstruction(var, false));
+		template.addRenderInstruction( new MvelRenderInstruction(var, false), decorateSectionName);
 	}
 
 	@Override
 	public void handleVariable(String var) {
-		template.addRenderInstruction( new MvelRenderInstruction(var));
+		template.addRenderInstruction( new MvelRenderInstruction(var), decorateSectionName);
 	}
 
 	@Override
 	public void handleText(String text) {
 		if( text.length()>0){
-			template.addRenderInstruction( new TextRenderInstruction( text));
+			template.addRenderInstruction( new TextRenderInstruction( text), decorateSectionName);
 		}
 	}
 
 	@Override
 	public void handleRender(String render) {
-		template.addRenderInstruction( new TemplateRenderInstruction(renderEngine,contentProvider,render));
+		template.addRenderInstruction( new TemplateRenderInstruction(renderEngine,contentProvider,render), decorateSectionName);
 	}
 
 	@Override

@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
-import moly.model.Model1;
-
 import org.junit.Test;
 
 
@@ -20,16 +18,14 @@ public class DecoratorTest {
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
 		
+		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp, "/moly/templates");
 		
-		Model1 model = new Model1();
-		model.setTitle( "TITLE");
-		model.setBody("BODY");
-		
+		Template template = templateFactory.getTemplate( "decorate-me.moly");
+		Context context = new Context();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		renderEngine.render( baos, model, "", new HashMap<String,Object>());
+		template.apply( baos, context);
 		
-		assertTrue( baos.toString().contains("TITLE"));
-		assertTrue( baos.toString().contains("BODY"));
+		System.out.println( baos.toString());
 		
 	}
 	
