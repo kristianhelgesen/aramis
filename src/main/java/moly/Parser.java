@@ -19,7 +19,15 @@ public class Parser {
 		EXPSECTIONEND, 
 		EXPINVSECTION,
 		EXPSTARTUNESCAPED,
-		EXPSTOPUNESCAPED
+		EXPSTOPUNESCAPED,
+		DECORATOR_START_1,
+		DECORATOR_START_2,
+		DECORATOR_SECTIONSTART,
+		DECORATOR_SECTIONEND,
+		DECORATOR_STOPPING,
+		DECORATOR_USE,
+		DECORATOR_USE_STOPPING,
+		
 	}
 
 	private ParserState ps = ParserState.TEXT;
@@ -32,6 +40,11 @@ public class Parser {
 	
 	
 	public void parse( InputStream is) throws Exception{
+		
+		if( is==null) {
+			throw new ParserException("InputStream to Parser cannot be null");
+		}
+		
 		int b;
 		while( (b=is.read())!=-1) {
 			parse( b, 1);
@@ -47,6 +60,7 @@ public class Parser {
 				switch( ch) {
 					case '{': ps = ParserState.EXPSTARTING;break;
 					case '[': ps = ParserState.RENDERSTARTING;break;
+					case '<': ps = ParserState.DECORATOR_START_1;break;
 					case EOF: callback.handleText( buffer.toString()); break; // EOF
 					default: buffer.append( (char)ch);
 				}
@@ -59,7 +73,9 @@ public class Parser {
 						callback.handleText( buffer.toString());
 						buffer = new StringBuffer();
 						break;
-					default: buffer.append( '[').append( (char)ch);
+					default: 
+						buffer.append( '[').append( (char)ch);
+						ps = ParserState.TEXT;
 				}
 				break;
 				
@@ -70,7 +86,22 @@ public class Parser {
 						callback.handleText( buffer.toString());
 						buffer = new StringBuffer();
 						break;
-					default: buffer.append( '{').append( (char)ch);
+					default:
+						buffer.append( '{').append( (char)ch);
+						ps = ParserState.TEXT;
+				}
+				break;
+				
+			case DECORATOR_START_1:
+				switch( ch) {
+					case '<':
+						ps = ParserState.DECORATOR_START_2;
+						callback.handleText( buffer.toString());
+						buffer = new StringBuffer();
+						break;
+					default:
+						buffer.append( '<').append( (char)ch);
+						ps = ParserState.TEXT;
 				}
 				break;
 				
@@ -80,6 +111,71 @@ public class Parser {
 					default: buffer.append( (char)ch);
 				}
 				break;	
+				
+			case DECORATOR_START_2:
+				switch( ch) {
+					case '<': if(buffer.length()==0) ps = ParserState.DECORATOR_USE; break;
+					case '#': if(buffer.length()==0) ps = ParserState.DECORATOR_SECTIONSTART; break;
+					case '/': if(buffer.length()==0) ps = ParserState.DECORATOR_SECTIONEND; break;
+					case '>': 
+						ps = ParserState.DECORATOR_STOPPING; 
+						callback.handleDecoratorApplySection( buffer.toString());
+						buffer = new StringBuffer();
+						break;
+					default: buffer.append( (char)ch);
+				}
+				break;
+				
+			case DECORATOR_SECTIONSTART:
+				switch( ch) {
+					case '>':
+						callback.handleDecoratorSectionStart( buffer.toString());
+						buffer = new StringBuffer();
+						ps = ParserState.DECORATOR_STOPPING;
+						break;
+					default: buffer.append( (char)ch);
+				}
+				break;
+				
+			case DECORATOR_SECTIONEND:
+				switch( ch) {
+					case '>':
+						callback.handleDecoratorSectionEnd( buffer.toString());
+						buffer = new StringBuffer();
+						ps = ParserState.DECORATOR_STOPPING;
+						break;
+					default: buffer.append( (char)ch);
+				}
+				break;				
+				
+			case DECORATOR_USE:
+				switch( ch) {
+					case '>': 
+						callback.handleUseDecorator( buffer.toString());
+						buffer = new StringBuffer();
+						ps = ParserState.DECORATOR_USE_STOPPING; 
+						break;
+					default: buffer.append( (char)ch);
+				}
+				break;
+				
+			case DECORATOR_USE_STOPPING:
+				switch( ch) {
+					case '>': 
+						ps = ParserState.DECORATOR_STOPPING;
+						break;
+					default: throw new ParserException("Expected > at line "+line);				
+				}
+				break;
+				
+			case DECORATOR_STOPPING:
+				switch( ch) {
+					case '>': 
+						ps = ParserState.TEXT;
+						break;
+					default: throw new ParserException("Expected > at line "+line+".");				
+				}
+				break;
 				
 			case EXPSTART:
 				switch( ch) {
@@ -173,8 +269,8 @@ public class Parser {
 					default: throw new ParserException("Expected ] at line "+line);
 				}
 				break;
+				
 
-		
 		}
 			
 			

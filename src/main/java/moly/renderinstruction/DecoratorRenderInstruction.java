@@ -4,24 +4,34 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import moly.Context;
-import moly.Template;
+import moly.DecorationReceivingTemplate;
 
 public class DecoratorRenderInstruction implements RenderInstruction {
 	
-	Template decorateTarget;
-	String sectionName;
+	String decorateSectionName;
+	DecorationReceivingTemplate decorateMe;
 	
-	public DecoratorRenderInstruction( Template decorateTarget, String sectionName) {
-		this.decorateTarget = decorateTarget; 
-		this.sectionName = sectionName;
+	public DecoratorRenderInstruction( String sectionName) {
+		this.decorateSectionName = sectionName;
+	}
+	
+	public void setDecorationReceivingTemplate( DecorationReceivingTemplate decorateMe){
+		this.decorateMe = decorateMe;
 	}
 
 	@Override
 	public Context apply(OutputStream os, Context context) throws IOException{
 		
-		decorateTarget.applySection( sectionName, os, context);
+		decorateMe.applySection( decorateSectionName, os, context);
 		
 		return context;
 	}
+
+	@Override
+	public String toString() {
+		return "DecoratorRenderInstruction("+decorateSectionName+","+decorateMe.getName()+")";
+	}
+	
+	
 
 }

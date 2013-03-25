@@ -21,7 +21,7 @@ public class ParserTest {
 		
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
-		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp);
+		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));
@@ -42,7 +42,7 @@ public class ParserTest {
 		
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
-		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp);
+		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));
@@ -50,9 +50,6 @@ public class ParserTest {
 	
 		Template template = tb.getTemplate();
 		
-		for( RenderInstruction ri: template.getRenderInsturctions()){
-			System.out.println(ri);
-		}
 		
 		assertEquals( 1, template.getRenderInsturctions().size());
 		
@@ -67,7 +64,7 @@ public class ParserTest {
 		
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
-		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp);
+		TemplateBuilder tb = new TemplateBuilder( "test1", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( new ByteArrayInputStream(test.getBytes()));
@@ -79,9 +76,21 @@ public class ParserTest {
 		RenderInstruction ri = template.getRenderInsturctions().get(1);
 		
 		assertEquals( TemplateRenderInstruction.class, ri.getClass());
-		
-		
 	}
 		
+	
+	
+	@Test
+	public void testDecorator() throws Exception{
+		
+		
+		TemplateFactory tf = new TemplateFactory( null, null, "/moly/templates");
+		Template template = tf.getTemplate("decorate-me.moly");
+		
+		System.out.println(	template.getRenderInsturctions());
+//		assertEquals( TemplateRenderInstruction.class, );
+	}
+	
+	
 	
 }

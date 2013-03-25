@@ -18,8 +18,8 @@ public class TemplateTest {
 	public void testExpression() throws Exception{
 	
 		Template t = new Template("test");
-		t.addRenderInstruction( new MvelRenderInstruction( "m1"), null);
-		t.addRenderInstruction( new MvelRenderInstruction( "m2"), null);
+		t.addRenderInstruction( new MvelRenderInstruction( "m1"));
+		t.addRenderInstruction( new MvelRenderInstruction( "m2"));
 		
 		Context root = new Context();
 		Context section1 = new Context(root);

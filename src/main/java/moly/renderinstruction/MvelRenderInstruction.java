@@ -72,6 +72,13 @@ public class MvelRenderInstruction implements RenderInstruction {
 		
 		return context;
 	}
+
+	@Override
+	public String toString() {
+		return "MvelRenderInstruction(" +compiledExpression.toString()+")";
+	}
+	
+	
 	
 	
 }

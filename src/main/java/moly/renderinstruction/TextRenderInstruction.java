@@ -18,5 +18,12 @@ public class TextRenderInstruction implements RenderInstruction {
 		os.write( textBytes);
 		return context;
 	}
+	
+	@Override
+	public String toString() {
+		return "TextRenderInstruction(" +new String(textBytes)+")";
+	}
+	
+		
 
 }

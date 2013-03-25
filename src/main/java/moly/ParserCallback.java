@@ -16,7 +16,12 @@ public interface ParserCallback {
 
 	public void handleSectionEnd(String string);
 	
-//	public void handleDecoratorStart( String decoratorName);
+	public void handleUseDecorator( String decoratorTemplateName);
 	
+	public void handleDecoratorSectionStart( String decoratorSectionName);
+	
+	public void handleDecoratorSectionEnd( String decoratorSectionName);
+
+	public void handleDecoratorApplySection(String string);
 
 }
