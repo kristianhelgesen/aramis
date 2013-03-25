@@ -11,37 +11,33 @@ import org.mvel2.MVEL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MvelRenderInstruction implements RenderInstruction {
+public class SectionRenderInstruction implements RenderInstruction {
 	
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger( MvelRenderInstruction.class);
+	private static final Logger logger = LoggerFactory.getLogger( SectionRenderInstruction.class);
 	
 	Object compiledExpression; 
-	boolean escape;
 	
-	public MvelRenderInstruction( String expression) {
-		this(expression, true);
-	}
-
-	public MvelRenderInstruction( String expression, boolean escape) {
+	public SectionRenderInstruction( String expression) {
 		compiledExpression = MVEL.compileExpression(expression); 
-		this.escape = escape;
 	}
-	
 
 	@Override
 	public Context apply(OutputStream os, final Context context) throws IOException{
 
-		Object property = Util.lookupProperty( compiledExpression, context);
+		Context localContext = context.clone();
+        Object property = Util.lookupProperty( compiledExpression, context);
 
-        if( property!=null){
-        	String prop = property.toString();
-        	if( escape) {
-        		prop = escapeHtml4( prop);
-        	}
-        	os.write( prop.getBytes());
+        if( property==null){
+        	return context;
         }
-		
+        
+        if( property instanceof Boolean) {
+        	
+        	//TBD..
+        	
+        }
+        
 		return context;
 	}
 

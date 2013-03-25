@@ -46,6 +46,17 @@ public class Context {
 	public Context getParent() {
 		return parent;
 	}
+	
+	public Context clone() {
+		Context clone = new Context( getParent());
+		clone.setController( getController());
+		clone.setModel( getModel());
+		
+		for( String key:parameters.keySet()){
+			clone.getParameters().put( key, parameters.get(key));
+		}
+		return clone;
+	}
 
 
 		
