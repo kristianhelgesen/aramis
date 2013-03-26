@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 public class SectionRenderInstruction implements RenderInstruction, RenderInstructionContainer {
 	
-	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger( SectionRenderInstruction.class);
 	
 	Object compiledExpression;
@@ -60,9 +59,8 @@ public class SectionRenderInstruction implements RenderInstruction, RenderInstru
 
 
 	@Override
-	public void addRenderInstruction(RenderInstruction ri) {
-		// TODO Auto-generated method stub
-		
+	public void addRenderInstruction(RenderInstruction r, String sectionName) {
+		ri.add(r);
 	}
 
 	

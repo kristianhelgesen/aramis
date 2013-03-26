@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import moly.renderinstruction.RenderInstruction;
+import moly.renderinstruction.RenderInstructionContainer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DecorationReceivingTemplate {
+public class DecorationReceivingTemplate implements RenderInstructionContainer {
 	private static final Logger logger = LoggerFactory.getLogger( DecorationReceivingTemplate.class);
 
 	Map<String,List<RenderInstruction>> decorateSectionRenderInstructions = new HashMap<String,List<RenderInstruction>>();

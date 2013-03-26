@@ -2,5 +2,5 @@ package moly.renderinstruction;
 
 
 public interface RenderInstructionContainer {
-	public void addRenderInstruction( RenderInstruction ri);
+	public void addRenderInstruction( RenderInstruction ri, String sectionName);
 }

@@ -21,12 +21,16 @@ public class Template implements RenderInstructionContainer{
 	public Template( String name) {
 		this.name = name;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	public List<RenderInstruction> getRenderInsturctions() {
 		return ri;
 	}
 
-	public void addRenderInstruction(RenderInstruction renderInstruction) {
+	public void addRenderInstruction(RenderInstruction renderInstruction, String sectionName) {
 		ri.add( renderInstruction);
 	}
 

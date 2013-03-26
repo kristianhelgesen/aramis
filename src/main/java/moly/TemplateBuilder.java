@@ -54,7 +54,9 @@ public class TemplateBuilder implements ParserCallback{
 
 	@Override
 	public void handleSectionStart(String section) {
-		addRenderInstruction( new SectionRenderInstruction( section));
+		SectionRenderInstruction sri = new SectionRenderInstruction( section);
+		addRenderInstruction( sri);
+		stack.push( sri);
 	}
 
 	@Override
@@ -63,6 +65,7 @@ public class TemplateBuilder implements ParserCallback{
 
 	@Override
 	public void handleSectionEnd(String string) {
+		stack.pop();
 	}
 
 	public Template getTemplate() {
@@ -75,13 +78,23 @@ public class TemplateBuilder implements ParserCallback{
 		if( template.getRenderInsturctions().size()>0) {
 			throw new ParserException("tag <<<"+decoratorTemplateName+">>> must be first in template");
 		}
-		decorationReceivingTemplate = new DecorationReceivingTemplate( template.name);
+		decorationReceivingTemplate = new DecorationReceivingTemplate( template.getName());
 		template = templateFactory.getTemplate( decoratorTemplateName+".moly");
+		
+		stack.clear();
+		stack.push( decorationReceivingTemplate);
+		
 		for( RenderInstruction ri:template.getRenderInsturctions()) {
 			if( ri instanceof DecoratorRenderInstruction) {
 				((DecoratorRenderInstruction)ri).setDecorationReceivingTemplate( decorationReceivingTemplate);
 			}
 		}
+	}
+
+	
+	@Override
+	public void handleDecoratorApplySection(String decorateSectionName) {
+		addRenderInstruction( new DecoratorRenderInstruction( decorateSectionName));
 	}
 
 	@Override
@@ -96,23 +109,8 @@ public class TemplateBuilder implements ParserCallback{
 	
 	
 	private void addRenderInstruction( RenderInstruction ri){
-		if( decorationReceivingTemplate == null) {
-			template.addRenderInstruction( ri);
-			return;
-		}
-		
-		if( decoratorSectionName != null) {
-			decorationReceivingTemplate.addRenderInstruction( ri, decoratorSectionName);
-			return;
-		}
+		stack.peek().addRenderInstruction( ri, decoratorSectionName);
 	}
-
-
-	@Override
-	public void handleDecoratorApplySection(String decorateSectionName) {
-		template.addRenderInstruction( new DecoratorRenderInstruction( decorateSectionName));
-	}
-	
 	
 
 }
