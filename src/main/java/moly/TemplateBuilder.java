@@ -1,8 +1,12 @@
 package moly;
 
+import java.util.Stack;
+
 import moly.renderinstruction.DecoratorRenderInstruction;
 import moly.renderinstruction.MvelRenderInstruction;
 import moly.renderinstruction.RenderInstruction;
+import moly.renderinstruction.RenderInstructionContainer;
+import moly.renderinstruction.SectionRenderInstruction;
 import moly.renderinstruction.TemplateRenderInstruction;
 import moly.renderinstruction.TextRenderInstruction;
 
@@ -14,6 +18,7 @@ public class TemplateBuilder implements ParserCallback{
 	ContentProvider contentProvider;
 	RenderEngine renderEngine;
 	TemplateFactory templateFactory;
+	Stack<RenderInstructionContainer> stack = new Stack<RenderInstructionContainer>(); 
 	
 	
 	public TemplateBuilder( String templateName, RenderEngine renderEngine, ContentProvider contenProvider, TemplateFactory templateFactory) {
@@ -21,6 +26,7 @@ public class TemplateBuilder implements ParserCallback{
 		this.renderEngine = renderEngine;
 		this.contentProvider = contenProvider;
 		this.templateFactory = templateFactory;
+		stack.push( template);
 	}
 
 	
@@ -47,7 +53,8 @@ public class TemplateBuilder implements ParserCallback{
 	}
 
 	@Override
-	public void handleSectionStart(String string) {
+	public void handleSectionStart(String section) {
+		addRenderInstruction( new SectionRenderInstruction( section));
 	}
 
 	@Override

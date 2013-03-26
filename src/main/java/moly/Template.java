@@ -6,11 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import moly.renderinstruction.RenderInstruction;
+import moly.renderinstruction.RenderInstructionContainer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Template {
+public class Template implements RenderInstructionContainer{
 
 	private static final Logger logger = LoggerFactory.getLogger( Template.class);
 

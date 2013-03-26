@@ -1,5 +1,9 @@
 BEFORE
-{{#bool}}
-SECTION
-{{/bool}}
+{{#trueBool}}
+TRUESECTION
+{{/truebool}}
+
+{{#falseBool}}
+FALSESECTION
+{{/falsebool}}
 AFTER

@@ -20,12 +20,17 @@ public class SectionTest {
 		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp, "/moly/templates");
 		Template template = templateFactory.getTemplate( "sectiontest.moly");
 		
+		System.out.println(template.getRenderInsturctions());
+		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 		Context context = new Context();
-		context.getParameters().put("bool", Boolean.FALSE);
+		context.getParameters().put("trueBool", Boolean.TRUE);
+		context.getParameters().put("falseBool", Boolean.FALSE);
+		
 		template.apply( baos, context);
-		assertThat( baos.toString(), not(containsString("SECTION")));
+		assertThat( baos.toString(), containsString("TRUESECTION"));
+		assertThat( baos.toString(), not(containsString("FALSESECTION")));
 		
 	}
 	
