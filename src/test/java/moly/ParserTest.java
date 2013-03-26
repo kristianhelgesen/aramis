@@ -1,11 +1,13 @@
 package moly;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 
+import moly.renderinstruction.DecoratorRenderInstruction;
 import moly.renderinstruction.RenderInstruction;
 import moly.renderinstruction.TemplateRenderInstruction;
+import moly.renderinstruction.TextRenderInstruction;
 
 import org.junit.Test;
 
@@ -86,9 +88,13 @@ public class ParserTest {
 		
 		TemplateFactory tf = new TemplateFactory( null, null, "/moly/templates");
 		Template template = tf.getTemplate("decorate-me.moly");
+
+		assertEquals( TextRenderInstruction.class, 		template.getRenderInsturctions().get(0).getClass());
+		assertEquals( DecoratorRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
+		assertEquals( TextRenderInstruction.class, 		template.getRenderInsturctions().get(2).getClass());
+		assertEquals( DecoratorRenderInstruction.class, template.getRenderInsturctions().get(3).getClass());
+		assertEquals( TextRenderInstruction.class, 		template.getRenderInsturctions().get(4).getClass());
 		
-		System.out.println(	template.getRenderInsturctions());
-//		assertEquals( TemplateRenderInstruction.class, );
 	}
 	
 	

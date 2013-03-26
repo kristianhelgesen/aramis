@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.*; 
+import static org.junit.Assert.*;
 
 public class DecoratorTest {
 
@@ -22,7 +24,11 @@ public class DecoratorTest {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		template.apply( baos, context);
 		
-		System.out.println( baos.toString());
+		assertThat( baos.toString(), containsString("AAA"));
+		assertThat( baos.toString(), containsString("S1"));
+		assertThat( baos.toString(), containsString("BBB"));
+		assertThat( baos.toString(), containsString("S2"));
+		assertThat( baos.toString(), containsString("CCC"));
 		
 	}
 	
