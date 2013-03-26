@@ -20,8 +20,6 @@ public class SectionTest {
 		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp, "/moly/templates");
 		Template template = templateFactory.getTemplate( "sectiontest.moly");
 		
-		System.out.println(template.getRenderInsturctions());
-		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 		Context context = new Context();
@@ -30,6 +28,28 @@ public class SectionTest {
 		
 		template.apply( baos, context);
 		assertThat( baos.toString(), containsString("TRUESECTION"));
+		assertThat( baos.toString(), not(containsString("FALSESECTION")));
+		
+	}
+
+	@Test
+	public void testBooleanNestedSection() throws Exception{
+		
+		ContentProvider cp = new MockContentProvider();
+		RenderEngine renderEngine = new RenderEngine( cp, "moly","/moly/templates");
+		
+		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp, "/moly/templates");
+		Template template = templateFactory.getTemplate( "sectionnestingtest.moly");
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		
+		Context context = new Context();
+		context.getParameters().put("trueBool", Boolean.TRUE);
+		context.getParameters().put("falseBool", Boolean.FALSE);
+		
+		template.apply( baos, context);
+		assertThat( baos.toString(), containsString("TRUESECTION1"));
+		assertThat( baos.toString(), containsString("TRUESECTION2"));
 		assertThat( baos.toString(), not(containsString("FALSESECTION")));
 		
 	}

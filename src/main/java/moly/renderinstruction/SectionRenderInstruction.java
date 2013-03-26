@@ -34,8 +34,6 @@ public class SectionRenderInstruction implements RenderInstruction, RenderInstru
         	return context;
         }
         
-        System.out.println("Boolean prop: "+property);
-        
         if( property instanceof Boolean && Boolean.TRUE.equals(((Boolean)property))) {
         	applyInternal(os, localContext);
         }
@@ -50,7 +48,7 @@ public class SectionRenderInstruction implements RenderInstruction, RenderInstru
 				logger.debug( "Applying renderInstruction: "+r);
 				context = r.apply( os, context);
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("", e);
 			}
 			
 		}
@@ -66,7 +64,7 @@ public class SectionRenderInstruction implements RenderInstruction, RenderInstru
 	
 	@Override
 	public String toString() {
-		return "MvelRenderInstruction(" +compiledExpression.toString()+")";
+		return "SectionRenderInstruction(" +compiledExpression.toString()+"\n"+ri+")";
 	}
 
 	

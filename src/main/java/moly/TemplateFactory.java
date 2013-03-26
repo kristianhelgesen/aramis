@@ -47,7 +47,7 @@ public class TemplateFactory {
 			templates.put( templateName, template);
 			return template;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error( "", e);
 			return null;
 		}
 	}

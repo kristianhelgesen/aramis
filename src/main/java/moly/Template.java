@@ -41,7 +41,7 @@ public class Template implements RenderInstructionContainer{
 				logger.debug( "Applying renderInstruction: "+r);
 				context = r.apply( os, context);
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("", e);
 			}
 			
 		}
