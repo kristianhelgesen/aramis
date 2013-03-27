@@ -6,6 +6,7 @@ import moly.renderinstruction.DecoratorRenderInstruction;
 import moly.renderinstruction.MvelRenderInstruction;
 import moly.renderinstruction.RenderInstruction;
 import moly.renderinstruction.RenderInstructionContainer;
+import moly.renderinstruction.SectionInvRenderInstruction;
 import moly.renderinstruction.SectionRenderInstruction;
 import moly.renderinstruction.TemplateRenderInstruction;
 import moly.renderinstruction.TextRenderInstruction;
@@ -60,7 +61,10 @@ public class TemplateBuilder implements ParserCallback{
 	}
 
 	@Override
-	public void handleInvertedSectionStart(String string) {
+	public void handleInvertedSectionStart(String section) {
+		SectionInvRenderInstruction siri = new SectionInvRenderInstruction( section);
+		addRenderInstruction( siri);
+		stack.push( siri);
 	}
 
 	@Override

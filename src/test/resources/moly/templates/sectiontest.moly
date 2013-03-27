@@ -1,3 +1,4 @@
+
 BEFORE
 {{#trueBool}}
 TRUESECTION
@@ -6,4 +7,8 @@ TRUESECTION
 {{#falseBool}}
 FALSESECTION
 {{/falsebool}}
+
+{{^falseBool}}
+INVSELECTION
+{{/falseBool}}
 AFTER

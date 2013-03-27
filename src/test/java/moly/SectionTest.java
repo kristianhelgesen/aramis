@@ -34,6 +34,8 @@ public class SectionTest {
 		template.apply( baos, context);
 		assertThat( baos.toString(), containsString("TRUESECTION"));
 		assertThat( baos.toString(), not(containsString("FALSESECTION")));
+		assertThat( baos.toString(), containsString("INVSELECTION"));
+		
 		
 	}
 
