@@ -1,12 +1,14 @@
 BEFORE
 {{#trueBool}}
-TRUESECTION1
-{{#trueBool}}
-TRUESECTION2
-{{/truebool}}
-{{#falseBool}}
-FALSESECTION
-{{/falsebool}}
+	TRUESECTION1
+
+	{{#trueBool}}
+		TRUESECTION2
+	{{/truebool}}
+
+	{{#falseBool}}
+		FALSESECTION
+	{{/falsebool}}
 
 {{/truebool}}
 

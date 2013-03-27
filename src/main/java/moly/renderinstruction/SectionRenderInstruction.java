@@ -24,18 +24,33 @@ public class SectionRenderInstruction implements RenderInstruction, RenderInstru
 		compiledExpression = MVEL.compileExpression(expression); 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Context apply(OutputStream os, final Context context) throws IOException{
 
-		Context localContext = context.clone();
         Object property = Util.lookupProperty( compiledExpression, context);
-
+        
         if( property==null){
         	return context;
         }
-        
+
         if( property instanceof Boolean && Boolean.TRUE.equals(((Boolean)property))) {
-        	applyInternal(os, localContext);
+        	applyInternal( os, context);
+        	return context;
+        }
+        if( property instanceof String && ((String)property).trim().length()>0) {
+        	applyInternal( os, context);
+        	return context;
+        }
+
+        if( property instanceof Iterable) {
+        	
+            Context localContext = new Context( context);
+        	for( Object o:((Iterable)property)){
+                localContext.setModel( o);
+            	applyInternal( os, localContext);
+        	}
+        	return context;
         }
         
 		return context;

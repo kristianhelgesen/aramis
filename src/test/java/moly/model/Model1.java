@@ -22,8 +22,9 @@ public class Model1 {
 	public String getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
+	public Model1 setTitle(String title) {
 		this.title = title;
+		return this;
 	}
 	public String getBody() {
 		return body;

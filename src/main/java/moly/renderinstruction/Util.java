@@ -10,23 +10,31 @@ class Util {
 	
 	private static final Logger logger = LoggerFactory.getLogger( Util.class);
 	
-	static Object lookupProperty( Object compiledExpression, Context localContext) {
-		Object property = executeExpression( compiledExpression,localContext.getParameters());
-        while( property==null && localContext.getParent()!=null) {
-        	localContext = localContext.getParent();
+	static Object lookupProperty( Object compiledExpression, Context context) {
+		
+		Object property = null;
+		Context rootContext = context;
+		
+		// if model is set in section scope, this takes precedence. Wait with checking the root model..
+		while( rootContext.getParent()!=null){
+        	property = executeExpression( compiledExpression, rootContext.getModel());
+        	rootContext = rootContext.getParent();
+		}
+		
+		Context localContext = context;
+        while( property==null && localContext!=null) {
         	property = executeExpression( compiledExpression, localContext.getParameters());
-        	
-            if( property==null) {
-            	property = executeExpression( compiledExpression, localContext.getModel());
-            }
+        	localContext = localContext.getParent();
         }
         
-        // check controller and model on root
+        // check controller on root only
         if( property==null) {
-        	property = executeExpression( compiledExpression, localContext.getController());
+        	property = executeExpression( compiledExpression, rootContext.getController());
         }
+
+        // finally, check root model
         if( property==null) {
-        	property = executeExpression( compiledExpression,localContext.getModel());
+        	property = executeExpression( compiledExpression,rootContext.getModel());
         }
 		return property;
 	}
