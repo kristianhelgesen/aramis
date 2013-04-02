@@ -26,7 +26,7 @@ public class ParserTest {
 		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
-		smp.parse( new ByteArrayInputStream(test.getBytes()));
+		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));
 		
 	
 		Template template = tb.getTemplate();
@@ -47,7 +47,7 @@ public class ParserTest {
 		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
-		smp.parse( new ByteArrayInputStream(test.getBytes()));
+		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));
 		
 	
 		Template template = tb.getTemplate();
@@ -69,7 +69,7 @@ public class ParserTest {
 		TemplateBuilder tb = new TemplateBuilder( "test1", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
-		smp.parse( new ByteArrayInputStream(test.getBytes()));
+		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));
 	
 		Template template = tb.getTemplate();
 		

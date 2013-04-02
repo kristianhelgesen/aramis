@@ -42,7 +42,7 @@ public class TemplateFactory {
 				logger.error( "template not found "+templateFQN);
 			}
 			
-			smp.parse( is);
+			smp.parse( templateName, is);
 			Template template = tb.getTemplate();
 			templates.put( templateName, template);
 			return template;

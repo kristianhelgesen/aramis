@@ -1,23 +1,25 @@
 package moly;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import moly.model.Article;
 import moly.model.Image;
 
 public class MockContentProvider extends ContentProvider{
+	
+	
+	Map<String,Object> content = new HashMap<String,Object>();
+
+	public MockContentProvider() {
+		content.put("123", new MockContent());
+		content.put("article123", new Article());
+		content.put("image234", new Image());
+	}
+	
 
 	public Object getContent(String contentref) {
-		if( "123".equals( contentref)) {
-			return new MockContent();
-		}
-		if( "article123".equals( contentref)) {
-			return new Article();
-		}
-		if( "image234".equals( contentref)) {
-			return new Image();
-		}
-		
-		
-		return null;
+		return content.get(contentref);
 	}
 	
 	

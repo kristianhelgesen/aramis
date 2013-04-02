@@ -39,7 +39,7 @@ public class Parser {
 	}
 	
 	
-	public void parse( InputStream is) throws Exception{
+	public void parse( String name, InputStream is) throws Exception{
 		
 		if( is==null) {
 			throw new ParserException("InputStream to Parser cannot be null");
@@ -47,13 +47,13 @@ public class Parser {
 		
 		int b;
 		while( (b=is.read())!=-1) {
-			parse( b, 1);
+			parse( name, b, 1);
 		}
-		parse( EOF,1);
+		parse( name, EOF, 1);
 		
 	}
 	
-	private void parse( int ch, int line) {
+	private void parse( String name, int ch, int line) {
 
 		switch( ps) {
 			case TEXT: 
@@ -164,7 +164,7 @@ public class Parser {
 					case '>': 
 						ps = ParserState.DECORATOR_STOPPING;
 						break;
-					default: throw new ParserException("Expected > at line "+line);				
+					default: throw new ParserException("Expected > at line "+line+" in template "+name);				
 				}
 				break;
 				
@@ -173,7 +173,7 @@ public class Parser {
 					case '>': 
 						ps = ParserState.TEXT;
 						break;
-					default: throw new ParserException("Expected > at line "+line+".");				
+					default: throw new ParserException("Expected > at line "+line+" in template "+name);				
 				}
 				break;
 				
@@ -244,7 +244,7 @@ public class Parser {
 					case '}': 
 						ps = ParserState.EXPSTOPPING;
 					break;
-					default: throw new ParserException("Expected } at line "+line);
+					default: throw new ParserException("Expected } at line "+line+" in template "+name);
 				}
 				break;
 				
@@ -255,7 +255,7 @@ public class Parser {
 						callback.handleVariable( buffer.toString());
 						buffer = new StringBuffer();
 					break;
-					default: throw new ParserException("Expected } at line "+line);
+					default: throw new ParserException("Expected } at line "+line+" in template "+name);
 				}
 				break;
 
@@ -266,7 +266,7 @@ public class Parser {
 						callback.handleRender( buffer.toString());
 						buffer = new StringBuffer();
 					break;
-					default: throw new ParserException("Expected ] at line "+line);
+					default: throw new ParserException("Expected ] at line "+line+" in template "+name);
 				}
 				break;
 				
