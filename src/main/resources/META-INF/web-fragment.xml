@@ -7,7 +7,7 @@
 	id="moly-mustaches-render" 
 	version="3.0">
 		
-        <name>moly-site</name>
+        <name>moly-site-render</name>
         <filter>
                 <filter-name>renderDispatcher</filter-name>
                 <filter-class>moly.site.RenderDispatcher</filter-class>
