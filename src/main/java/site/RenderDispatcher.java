@@ -1,6 +1,8 @@
 package site;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,12 +12,35 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import moly.ContentProvider;
+import moly.RenderEngine;
+
 public class RenderDispatcher implements Filter {
+	
+	private RenderEngine renderEngine;
+	private URLResolver urlResolver;
+	private String controllerPackage;
+	private String templatePackage;
+	
+	private String contentProviderClass;
+	private String urlResolverClass;
+	
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
 		
+		ContentProvider contentProvider;
+		try {
+			contentProvider = (ContentProvider)Class.forName(contentProviderClass).newInstance();
+			urlResolver = (URLResolver)Class.forName(urlResolverClass).newInstance();
+			renderEngine = new RenderEngine( contentProvider, controllerPackage, templatePackage);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -25,9 +50,8 @@ public class RenderDispatcher implements Filter {
 		String uri = getPlainRequestURI( (HttpServletRequest)req);
 		Object resolvedContent = urlResolver.urlToContent(uri);
 		if( resolvedContent!=null) {
-			
-			renderEngine.render( resolvedContent);
-			
+			OutputStream os = res.getOutputStream();
+			renderEngine.render( os, resolvedContent, "", new HashMap<String,Object>());
 		}
 		else {
 			filterChain.doFilter( req, res);
