@@ -29,6 +29,7 @@ public class DecoratorTest {
 		assertThat( baos.toString(), containsString("BBB"));
 		assertThat( baos.toString(), containsString("S2"));
 		assertThat( baos.toString(), containsString("CCC"));
+		assertThat( baos.toString(), not(containsString("ignore")));
 		
 	}
 	

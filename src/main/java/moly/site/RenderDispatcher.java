@@ -1,4 +1,4 @@
-package site;
+package moly.site;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,7 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import moly.ContentProvider;
 import moly.RenderEngine;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class RenderDispatcher implements Filter {
+	
+	private static final Logger logger = LoggerFactory.getLogger( RenderDispatcher.class);
 	
 	private RenderEngine renderEngine;
 	private URLResolver urlResolver;
@@ -27,20 +32,49 @@ public class RenderDispatcher implements Filter {
 	
 
 	@Override
-	public void init(FilterConfig arg0) throws ServletException {
+	public void init(FilterConfig filterConfig) throws ServletException {
 		
-		ContentProvider contentProvider;
-		try {
-			contentProvider = (ContentProvider)Class.forName(contentProviderClass).newInstance();
-			urlResolver = (URLResolver)Class.forName(urlResolverClass).newInstance();
-			renderEngine = new RenderEngine( contentProvider, controllerPackage, templatePackage);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		System.out.println("init");
+		contentProviderClass = filterConfig.getServletContext().getInitParameter("contentProvider");
+		urlResolverClass = filterConfig.getServletContext().getInitParameter("urlResolver");
+		System.out.println("urlResolverClass"+urlResolverClass);
+		templatePackage = filterConfig.getServletContext().getInitParameter("templatePackage");
+		controllerPackage = filterConfig.getServletContext().getInitParameter("controllerPackage");
+		
+		if( templatePackage==null){
+			templatePackage = "/templates";
 		}
+		if( controllerPackage==null){
+			controllerPackage = "controllers";
+		}
+		
+		
+		if( contentProviderClass==null || urlResolverClass==null) {
+			return;
+		}
+		
+		ContentProvider contentProvider = null;
+		try {
+			contentProvider = (ContentProvider)Class.forName( contentProviderClass).newInstance();
+		} catch (ClassNotFoundException e) {
+			logger.warn( "Class {} for contentProvider not found",contentProviderClass);
+		} catch (InstantiationException e) {
+			logger.error( "", e);
+		} catch (IllegalAccessException e) {
+			logger.error( "", e);
+		}
+		
+		try {
+			urlResolver = (URLResolver)Class.forName( urlResolverClass).newInstance();
+		} catch (ClassNotFoundException e) {
+			logger.warn( "Class {} for urlResolver not found",urlResolverClass);
+		} catch (InstantiationException e) {
+			logger.error( "", e);
+		} catch (IllegalAccessException e) {
+			logger.error( "", e);
+		}
+		
+		renderEngine = new RenderEngine( contentProvider, controllerPackage, templatePackage);
 	}
 
 	
@@ -48,6 +82,13 @@ public class RenderDispatcher implements Filter {
 	public void doFilter( ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
 		
 		String uri = getPlainRequestURI( (HttpServletRequest)req);
+		System.out.println("filter: "+uri);
+
+		if( urlResolver==null) {
+			filterChain.doFilter( req, res);
+			return;
+		}
+
 		Object resolvedContent = urlResolver.urlToContent(uri);
 		if( resolvedContent!=null) {
 			OutputStream os = res.getOutputStream();

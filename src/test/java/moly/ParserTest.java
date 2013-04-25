@@ -18,7 +18,6 @@ public class ParserTest {
 	@Test
 	public void testTextOnly() throws Exception{
 		
-//		String test = "asdfasdf {{test}} [[id to render]] asdf";
 		String test = "asdfasdf asdf";
 		
 		ContentProvider cp = new MockContentProvider();
@@ -39,7 +38,6 @@ public class ParserTest {
 	@Test
 	public void testExpression() throws Exception{
 		
-//		String test = "asdfasdf {{test}} [[id to render]] asdf";
 		String test = "{{test}}";
 		
 		ContentProvider cp = new MockContentProvider();

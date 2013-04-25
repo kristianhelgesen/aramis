@@ -18,7 +18,7 @@ public class MockContentProvider extends ContentProvider{
 	}
 	
 
-	public Object getContent(String contentref) {
+	public Object getContent(Object contentref) {
 		return content.get(contentref);
 	}
 	

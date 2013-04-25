@@ -40,6 +40,11 @@ public class RenderEngine {
 		String templateName = className.toLowerCase() + (perspective.length()>0?"-"+perspective:"") + ".moly";
 		Template template = templateFactory.getTemplate( templateName);
 
+		if( template==null) {
+			logger.warn("Template {} not found", templateName);
+			return;
+		}
+		
 		template.apply( os, templateContext);
 		
 		logger.debug("templateName: " + templateName );

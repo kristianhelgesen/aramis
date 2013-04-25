@@ -3,11 +3,11 @@ package moly;
 public abstract class ContentProvider {
 	
 
-	public abstract Object getContent(String contentref);
+	public abstract Object getContent(Object contentref);
 
 	
 	@SuppressWarnings("unchecked")
-	public <T> T getContent( String contentref, Class<T> type) {
+	public <T> T getContent( Object contentref, Class<T> type) {
 
 		Object value = getContent(contentref);
 		if (value == null) {

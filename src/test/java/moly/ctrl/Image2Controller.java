@@ -15,4 +15,12 @@ public class Image2Controller implements ContentAware<Image2> {
 	public void setContent(Image2 content) {
 		this.content = content;
 	}
+
+	@Override
+	public Image2 getContent() {
+		return content;
+	}
+	
+	
+	
 }

@@ -1,7 +1,9 @@
-package site;
+package moly.site;
 
 public interface URLResolver {
 
 	public Object urlToContent(String uri);
+	
+	public String contentToURL( Object content);
 
 }
