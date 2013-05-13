@@ -4,13 +4,13 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" 
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd" 
-	id="moly-mustaches-render" 
+	id="com.github.aramis-mustaches-render" 
 	version="3.0">
 		
-        <name>moly-site-render</name>
+        <name>com.github.aramis-site-render</name>
         <filter>
                 <filter-name>renderDispatcher</filter-name>
-                <filter-class>moly.site.RenderDispatcher</filter-class>
+                <filter-class>com.github.aramis.site.RenderDispatcher</filter-class>
         </filter>
         <filter-mapping>
                 <filter-name>renderDispatcher</filter-name>
