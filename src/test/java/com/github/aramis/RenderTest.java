@@ -12,9 +12,9 @@ import org.mvel2.MVEL;
 
 import com.github.aramis.ContentProvider;
 import com.github.aramis.RenderEngine;
-import com.github.aramis.ctrl.Image2Controller;
 import com.github.aramis.model.Article;
 import com.github.aramis.model.Image2;
+import com.github.aramis.model.Image2Controller;
 import com.github.aramis.model.Model1;
 
 
@@ -26,8 +26,7 @@ public class RenderTest {
 	public void testExpression() throws Exception{
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
-		
+		RenderEngine renderEngine = new RenderEngine( cp);
 		
 		Model1 model = new Model1();
 		model.setTitle( "TITLE");
@@ -44,10 +43,12 @@ public class RenderTest {
 	@Test
 	public void testInclude() throws Exception {
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		renderEngine.render( baos, new Article(), "", new HashMap<String,Object>());
+
+		System.out.println(baos.toString());
 
 		assertTrue( baos.toString().contains("Mock article title"));		
 		assertTrue( baos.toString().contains("<img src='http://localhost/image234' width='255'/>"));		
@@ -58,12 +59,10 @@ public class RenderTest {
 	@Test
 	public void testIncludeWithController() throws Exception {
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis.ctrl","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		renderEngine.render( baos, new Image2(), "", new HashMap<String,Object>());
-		
-		System.out.println(baos.toString());
 		
 		assertEquals( "<img id='image1' src='http://images/image1' />", baos.toString().trim());
 	
@@ -78,7 +77,7 @@ public class RenderTest {
 		System.out.println( MVEL.executeExpression( compiledExpression, ctrl));
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis.ctrl", "/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 
 		System.out.println("start");
 		for( int i=0; i<100000; i++){

@@ -2,6 +2,9 @@ package com.github.aramis;
 
 import java.util.Stack;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.aramis.renderinstruction.DecoratorRenderInstruction;
 import com.github.aramis.renderinstruction.MvelRenderInstruction;
 import com.github.aramis.renderinstruction.RenderInstruction;
@@ -13,7 +16,8 @@ import com.github.aramis.renderinstruction.TextRenderInstruction;
 
 
 public class TemplateBuilder implements ParserCallback{
-	
+	private static final Logger logger = LoggerFactory.getLogger( TemplateBuilder.class);
+
 	Template template;
 	DecorationReceivingTemplate decorationReceivingTemplate;
 	String decoratorSectionName;
@@ -83,8 +87,13 @@ public class TemplateBuilder implements ParserCallback{
 		if( template.getRenderInsturctions().size()>0) {
 			throw new ParserException("tag <<<"+decoratorTemplateName+">>> must be first in template");
 		}
+		decoratorTemplateName = decoratorTemplateName.trim();
 		decorationReceivingTemplate = new DecorationReceivingTemplate( template.getName());
-		template = templateFactory.getTemplate( decoratorTemplateName+".decorator");
+		template = templateFactory.getTemplate( decoratorTemplateName);
+		if( template==null){
+			logger.error("Template not found " +decoratorTemplateName+ " ");
+			return;
+		}
 		
 		stack.clear();
 		stack.push( decorationReceivingTemplate);

@@ -28,7 +28,7 @@ public class ParserTest {
 		String test = "asdfasdf asdf";
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
@@ -48,7 +48,7 @@ public class ParserTest {
 		String test = "{{test}}";
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
@@ -70,7 +70,7 @@ public class ParserTest {
 		String test = "xxxx [[ id:123 , perspective:'test', count:4 ]] yyyy";
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 		TemplateBuilder tb = new TemplateBuilder( "test1", renderEngine, cp, null);
 		Parser smp = new Parser( tb);
 		
@@ -91,8 +91,8 @@ public class ParserTest {
 	public void testDecorator() throws Exception{
 		
 		
-		TemplateFactory tf = new TemplateFactory( null, null, "/templates");
-		Template template = tf.getTemplate("decorate-me.template");
+		TemplateFactory tf = new TemplateFactory( null, null);
+		Template template = tf.getTemplate("/templates/decorate-me.art");
 
 		assertEquals( TextRenderInstruction.class, 		template.getRenderInsturctions().get(0).getClass());
 		assertEquals( DecoratorRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());

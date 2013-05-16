@@ -75,7 +75,7 @@ public class RenderDispatcher implements Filter {
 			logger.error( "", e);
 		}
 		
-		renderEngine = new RenderEngine( contentProvider, controllerPackage, templatePackage);
+		renderEngine = new RenderEngine( contentProvider);
 	}
 
 	

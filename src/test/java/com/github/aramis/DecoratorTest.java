@@ -21,11 +21,11 @@ public class DecoratorTest {
 	public void testDecorator() throws Exception{
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 		
-		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp, "/templates");
+		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp);
 		
-		Template template = templateFactory.getTemplate( "decorate-me.template");
+		Template template = templateFactory.getTemplate( "/templates/decorate-me.art");
 		Context context = new Context();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		template.apply( baos, context);

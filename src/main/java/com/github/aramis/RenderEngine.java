@@ -12,16 +12,12 @@ public class RenderEngine {
 	private static final Logger logger = LoggerFactory.getLogger( RenderEngine.class);
 	
 	ContentProvider contentProvider;
-	String controllerPackageName;
-	String templatePackageName;
 	TemplateFactory templateFactory;
 
 
-	public RenderEngine( ContentProvider contentProvider, String controllerPackageName, String templatePackageName) {
+	public RenderEngine( ContentProvider contentProvider) {
 		this.contentProvider = contentProvider;
-		this.controllerPackageName = controllerPackageName;
-		this.templatePackageName = templatePackageName;
-		templateFactory = new TemplateFactory( this, contentProvider, templatePackageName);
+		templateFactory = new TemplateFactory( this, contentProvider);
 	}
 	
 	
@@ -31,17 +27,21 @@ public class RenderEngine {
 		templateContext.setModel( content);
 		
 		String className = content.getClass().getSimpleName();
+		String classPackageName = content.getClass().getPackage().getName();
 		
 		initController(content, templateContext, className);
 		
 		applyValues( templateContext, transferValues);
 		
 		if( perspective==null) perspective = "";
-		String templateName = className.toLowerCase() + (perspective.length()>0?"-"+perspective:"") + ".template";
+		String templateName = "/"+classPackageName.replace('.', '/') + "/"
+								+ className.toLowerCase() 
+								+ (perspective.length()>0?"-"+perspective:"") + ".art";
+		
 		Template template = templateFactory.getTemplate( templateName);
 
 		if( template==null) {
-			logger.warn("Template {} not found", templateName);
+			logger.warn("Template |{}| not found", templateName);
 			return;
 		}
 		
@@ -54,6 +54,8 @@ public class RenderEngine {
 	@SuppressWarnings({"unchecked","rawtypes"})
 	private void initController(Object content, Context templateContext,
 			String className) {
+		
+		String controllerPackageName = content.getClass().getPackage().getName();
 		String controllerClassName = className +"Controller";
 		
 		Object controller = null;

@@ -1,7 +1,6 @@
-package com.github.aramis.ctrl;
+package com.github.aramis.model;
 
 import com.github.aramis.ContentAware;
-import com.github.aramis.model.Image2;
 
 
 public class Image2Controller implements ContentAware<Image2> {

@@ -26,10 +26,10 @@ public class SectionTest {
 	public void testBooleanSection() throws Exception{
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 		
-		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp, "/templates");
-		Template template = templateFactory.getTemplate( "sectiontest.template");
+		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp);
+		Template template = templateFactory.getTemplate( "/templates/sectiontest.art");
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
@@ -49,10 +49,10 @@ public class SectionTest {
 	public void testBooleanNestedSection() throws Exception{
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 		
-		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp, "/templates");
-		Template template = templateFactory.getTemplate( "sectionnestingtest.template");
+		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp);
+		Template template = templateFactory.getTemplate( "/templates/sectionnestingtest.art");
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
@@ -71,10 +71,10 @@ public class SectionTest {
 	public void testIterateSection() throws Exception{
 		
 		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp, "com.github.aramis","/templates");
+		RenderEngine renderEngine = new RenderEngine( cp);
 		
-		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp, "/templates");
-		Template template = templateFactory.getTemplate( "iteration.template");
+		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp);
+		Template template = templateFactory.getTemplate( "/templates/iteration.art");
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		

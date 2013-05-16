@@ -13,13 +13,11 @@ public class TemplateFactory {
 
 	Map<String, Template> templates = new HashMap<String, Template>();
 	ContentProvider contentProvider;
-	String templatePackageName;
 	RenderEngine renderEngine;
 	
-	public TemplateFactory( RenderEngine renderEngine, ContentProvider contentProvider, String templatePackageName) {
+	public TemplateFactory( RenderEngine renderEngine, ContentProvider contentProvider) {
 		this.renderEngine = renderEngine;
 		this.contentProvider = contentProvider;
-		this.templatePackageName = templatePackageName;
 	}
 	
 	public Template getTemplate( String templateName) {
@@ -35,11 +33,10 @@ public class TemplateFactory {
 		Parser smp = new Parser( tb);
 		
 		try {
-			String templateFQN = templatePackageName +"/"+ templateName;
-			logger.debug(templateFQN);
-			InputStream is = getClass().getResourceAsStream( templateFQN);
+			InputStream is = getClass().getResourceAsStream( templateName);
 			if( is == null) {
-				logger.error( "template not found "+templateFQN);
+				logger.error( "template not found "+templateName);
+				return null;
 			}
 			
 			smp.parse( templateName, is);
