@@ -11,13 +11,15 @@ Plain mustache templating. An excelent description here: http://mustache.github.
 
 I brief:
 
-| {{expression}}| evaluates and prints the result of the expression. HTML escaped. |
-| {{{expression}}}| evaluates and prints the result of the expression. Not HTML escaped. |
-| {{#section}}| Starts a section if variable doesn`t evaluate to false or an empty list. A section also loops over the elements if the expression is a list|
-| {{/section}}| Ends a section |
-| {{^section}}| Inverted section. Renders if expression is false or an empty list|
-| {{!comment}}| Comment. Not rendered |
-| {{>partial}}| Partial. Includes another template |
+| Expression | Description |
+|-------|--------|
+| {{expression}} | evaluates and prints the result of the expression. HTML escaped. |
+| {{{expression}}} | evaluates and prints the result of the expression. Not HTML escaped. |
+| {{#section}} | Starts a section if variable doesn`t evaluate to false or an empty list. A section also loops over the elements if the expression is a list |
+| {{/section}} | Ends a section |
+| {{^section}} | Inverted section. Renders if expression is false or an empty list |
+| {{!comment}} | Comment. Not rendered |
+| {{>partial}} | Partial. Includes another template |
 
 
 [[render content]]
