@@ -104,6 +104,15 @@ public class TemplateBuilder implements ParserCallback{
 			}
 		}
 	}
+	
+	@Override
+	public void handlePartial( String partial) {
+		partial = partial.trim();
+		Template partialTemplate = templateFactory.getTemplate( partial);
+		for( RenderInstruction ri:partialTemplate.getRenderInsturctions()) {
+			addRenderInstruction( ri);
+		}
+	}
 
 	
 	@Override

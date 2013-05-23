@@ -24,4 +24,6 @@ public interface ParserCallback {
 
 	public void handleDecoratorApplySection(String string);
 
+	public void handlePartial(String string);
+
 }

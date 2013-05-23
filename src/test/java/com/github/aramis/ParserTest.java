@@ -1,18 +1,11 @@
 package com.github.aramis;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 
-
 import org.junit.Test;
 
-import com.github.aramis.ContentProvider;
-import com.github.aramis.Parser;
-import com.github.aramis.RenderEngine;
-import com.github.aramis.Template;
-import com.github.aramis.TemplateBuilder;
-import com.github.aramis.TemplateFactory;
 import com.github.aramis.renderinstruction.DecoratorRenderInstruction;
 import com.github.aramis.renderinstruction.RenderInstruction;
 import com.github.aramis.renderinstruction.TemplateRenderInstruction;
@@ -47,9 +40,7 @@ public class ParserTest {
 		
 		String test = "{{test}}";
 		
-		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp);
-		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp, null);
+		TemplateBuilder tb = new TemplateBuilder( "test", null, null, null);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));
@@ -69,9 +60,7 @@ public class ParserTest {
 		
 		String test = "xxxx [[ id:123 , perspective:'test', count:4 ]] yyyy";
 		
-		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp);
-		TemplateBuilder tb = new TemplateBuilder( "test1", renderEngine, cp, null);
+		TemplateBuilder tb = new TemplateBuilder( "test1", null, null, null);
 		Parser smp = new Parser( tb);
 		
 		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));
@@ -99,6 +88,30 @@ public class ParserTest {
 		assertEquals( TextRenderInstruction.class, 		template.getRenderInsturctions().get(2).getClass());
 		assertEquals( DecoratorRenderInstruction.class, template.getRenderInsturctions().get(3).getClass());
 		assertEquals( TextRenderInstruction.class, 		template.getRenderInsturctions().get(4).getClass());
+		
+	}
+	
+	
+	
+	@Test
+	public void testPartial() throws Exception {
+		
+		String test = "xxxx {{> /templates/text.art }}  yyyy";
+		
+		TemplateFactory tf = new TemplateFactory(null,null);
+		TemplateBuilder tb = new TemplateBuilder( "test1", null, null, tf);
+		Parser smp = new Parser( tb);
+		
+		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));		
+	
+		Template template = tb.getTemplate();
+
+		System.out.println(template.getRenderInsturctions());
+		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(0).getClass());
+		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
+		assertEquals( "TextRenderInstruction(text123)", template.getRenderInsturctions().get(1).toString());
+		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(2).getClass());
+		
 		
 	}
 	

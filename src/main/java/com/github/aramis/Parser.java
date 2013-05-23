@@ -18,6 +18,7 @@ public class Parser {
 		EXPSECTIONSTART, 
 		EXPSECTIONEND, 
 		EXPINVSECTION,
+		EXPPARTIAL,
 		EXPSTARTUNESCAPED,
 		EXPSTOPUNESCAPED,
 		DECORATOR_START_1,
@@ -182,6 +183,7 @@ public class Parser {
 					case '#': if(buffer.length()==0) ps = ParserState.EXPSECTIONSTART; break;
 					case '/': if(buffer.length()==0) ps = ParserState.EXPSECTIONEND; break;
 					case '^': if(buffer.length()==0) ps = ParserState.EXPINVSECTION; break;
+					case '>': if(buffer.length()==0) ps = ParserState.EXPPARTIAL; break;
 					case '{': if(buffer.length()==0) ps = ParserState.EXPSTARTUNESCAPED; break;
 					case '!': if(buffer.length()==0) ps = ParserState.EXPCOMMENT; break;
 					case '}': ps = ParserState.EXPSTOPPING; break;
@@ -200,6 +202,17 @@ public class Parser {
 				}
 				break;		
 				
+			case EXPPARTIAL:
+				switch( ch) {
+					case '}': 
+						callback.handlePartial( buffer.toString());
+						buffer = new StringBuffer();
+						ps = ParserState.EXPSTOPPING; 
+						break;
+					default: buffer.append( (char)ch);
+				}
+				break;			
+
 			case EXPINVSECTION:
 				switch( ch) {
 					case '}': 
@@ -252,7 +265,8 @@ public class Parser {
 				switch( ch) {
 					case '}': 
 						ps = ParserState.TEXT;
-						callback.handleVariable( buffer.toString());
+						if( buffer.length()>0)
+							callback.handleVariable( buffer.toString());
 						buffer = new StringBuffer();
 					break;
 					default: throw new ParserException("Expected } at line "+line+" in template "+name);

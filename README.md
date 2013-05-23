@@ -7,7 +7,17 @@ The template language has three different flavors (or mustaches).
 
 {{mustache expression}}
 ------
-Plain mustache templating.
+Plain mustache templating. An excelent description here: http://mustache.github.io/mustache.5.html
+
+I brief:
+
+| {{expression}}| evaluates and prints the result of the expression. HTML escaped. |
+| {{{expression}}}| evaluates and prints the result of the expression. Not HTML escaped. |
+| {{#section}}| Starts a section if variable doesn`t evaluate to false or an empty list. A section also loops over the elements if the expression is a list|
+| {{/section}}| Ends a section |
+| {{^section}}| Inverted section. Renders if expression is false or an empty list|
+| {{!comment}}| Comment. Not rendered |
+| {{>partial}}| Partial. Includes another template |
 
 
 [[render content]]
@@ -72,7 +82,7 @@ public class MyContentProvider extends ContentProvider{
 
 Run:
 
-```
+```java
 ContentProvider contentProvider = new MyContentProvider();
 RenderEngine renderEngine = new RenderEngine( contentProvider);
 
@@ -81,8 +91,11 @@ renderEngine.render( System.out, "article123");
 
 
 The template to render the content must be in the same package as the content object, and be named the same as the class - in lowercase with .art suffix.
-To enable rendering in different perspectives, add the perspective name to the template file. 
-Controllers is also supported. Add "Controller" to the model class name, and it is directly available in the template. 
+
+To add a template for rendering the content in a different perspective, add a template that ends with the perspective name.
+ 
+Controllers are also supported. Add "Controller" to the model class name, and it is directly available in the template. 
+
 ```
 Article.java
 ArticleController.java
