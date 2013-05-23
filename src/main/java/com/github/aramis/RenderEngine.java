@@ -20,7 +20,15 @@ public class RenderEngine {
 		templateFactory = new TemplateFactory( this, contentProvider);
 	}
 	
+	public void render ( OutputStream os, String id){
+		render( os, id, "", null);
+	}
 	
+	public void render ( OutputStream os, String id, String perspective, Map<String,Object> transferValues){
+		Object content = contentProvider.getContent( id);
+		render( os, content, perspective, transferValues);
+	}
+
 	public void render ( OutputStream os, Object content, String perspective, Map<String,Object> transferValues){
 		
 		Context templateContext = new Context();

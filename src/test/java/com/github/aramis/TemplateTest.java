@@ -19,8 +19,6 @@ public class TemplateTest {
 	
 	@Test
 	public void testExpression() throws Exception{
-		//aramis/src/test/java
-		System.out.println("XXXXXX"+getClass().getResourceAsStream("/com/github/aramis/model/article.art"));
 	
 		Template t = new Template("test");
 		t.addRenderInstruction( new MvelRenderInstruction( "m1"), null);

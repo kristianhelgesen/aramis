@@ -55,8 +55,6 @@ public class TemplateRenderInstruction implements RenderInstruction {
 	@Override
 	public Context apply(OutputStream os, Context context) throws IOException{
 		
-		Object content = contentProvider.getContent( id);
-		
 		Map<String,Object> transferValues = new HashMap<String,Object>(); // <compiled expression, resolved value>
 		
 		for( Map.Entry<String,Object> entry : transferExpressions.entrySet() ){
@@ -68,7 +66,7 @@ public class TemplateRenderInstruction implements RenderInstruction {
 			transferValues.put( targetProperty, targetObj);
 		}
 		
-		renderEngine.render( os, content, perspective, transferValues);
+		renderEngine.render( os, id, perspective, transferValues);
 		
 		return context;
 	}

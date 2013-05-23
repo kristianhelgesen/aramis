@@ -12,21 +12,17 @@ Plain mustache templating.
 
 [[render content]]
 -------
-Renders content from any content provider. The content provider is pluggable, and you need to implement your own.
 
-```java
-public class MyContentProvider extends ContentProvider{
-	public Object getContent(Object contentref){
-		// find and return your content
-	}
-}
+Usage: 
+
+To render content, provide the ID to the desired content. 
+```
+[[ id:contentId ]]
 ```
 
-The template to render the content must be in the same package as the content object, and be named the same as the class - in lowercase with .art suffix.
-In the calling template, just provide the id to the content to be rendered:
-
+To render content in a different perspective, add the parameter 'perspective' 
 ```
-[[ id:contentID ]]
+[[ id:contentId, perspective:'list' ]]
 ```
 
 
@@ -55,8 +51,46 @@ In your template, define the decorator at the top, and the content of the sectio
 ```
 
 
+
+
 Installation
-=========
+==============
 
 For now, you'll have to clone this repo, and mvn install the artifact..
+
+Setup:
+
+The content provider is pluggable, and you need to implement your own.
+
+```java
+public class MyContentProvider extends ContentProvider{
+	public Object getContent(Object contentref){
+		// find and return your content
+	}
+}
+```
+
+Run:
+
+```
+ContentProvider contentProvider = new MyContentProvider();
+RenderEngine renderEngine = new RenderEngine( contentProvider);
+
+renderEngine.render( System.out, "article123");
+```
+
+
+The template to render the content must be in the same package as the content object, and be named the same as the class - in lowercase with .art suffix.
+To enable rendering in different perspectives, add the perspective name to the template file. 
+Controllers is also supported. Add "Controller" to the model class name, and it is directly available in the template. 
+```
+Article.java
+ArticleController.java
+article.art
+article-list.art
+```
+
+
+
+
 
