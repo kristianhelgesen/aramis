@@ -8,26 +8,26 @@ public class Parser {
 	
 	enum ParserState {
 		TEXT,
-		EXPSTARTING,
-		EXPSTART,
-		EXPSTOPPING,
-		RENDERSTARTING,
-		RENDERSTART,
-		RENDERSTOPPING, 
-		EXPCOMMENT, 
-		EXPSECTIONSTART, 
-		EXPSECTIONEND, 
-		EXPINVSECTION,
-		EXPPARTIAL,
-		EXPSTARTUNESCAPED,
-		EXPSTOPUNESCAPED,
+		EXPRESSION_START_1,
+		EXPRESSION_START_2,
+		EXPRESSION_COMMENT, 
+		EXPRESSION_SECTION_START, 
+		EXPRESSION_SECTION_END, 
+		EXPRESSION_INV_SECTION,
+		EXPRESSION_PARTIAL,
+		EXPRESSION_START_UNESCAPED,
+		EXPRESSION_STOP_2,
+		EXPRESSION_STOP_1,
+		RENDER_START_1,
+		RENDER_START_2,
+		RENDER_STOP_1, 
 		DECORATOR_START_1,
 		DECORATOR_START_2,
 		DECORATOR_SECTIONSTART,
 		DECORATOR_SECTIONEND,
-		DECORATOR_STOPPING,
+		DECORATOR_STOP_1,
 		DECORATOR_USE,
-		DECORATOR_USE_STOPPING,
+		DECORATOR_STOP_2,
 		
 	}
 
@@ -59,18 +59,18 @@ public class Parser {
 		switch( ps) {
 			case TEXT: 
 				switch( ch) {
-					case '{': ps = ParserState.EXPSTARTING;break;
-					case '[': ps = ParserState.RENDERSTARTING;break;
+					case '{': ps = ParserState.EXPRESSION_START_1;break;
+					case '[': ps = ParserState.RENDER_START_1;break;
 					case '<': ps = ParserState.DECORATOR_START_1;break;
 					case EOF: callback.handleText( buffer.toString()); break; // EOF
 					default: buffer.append( (char)ch);
 				}
 				break;
 				
-			case RENDERSTARTING:
+			case RENDER_START_1:
 				switch( ch) {
 					case '[': 
-						ps = ParserState.RENDERSTART;
+						ps = ParserState.RENDER_START_2;
 						callback.handleText( buffer.toString());
 						buffer = new StringBuffer();
 						break;
@@ -80,10 +80,10 @@ public class Parser {
 				}
 				break;
 				
-			case EXPSTARTING:
+			case EXPRESSION_START_1:
 				switch( ch) {
 					case '{': 
-						ps = ParserState.EXPSTART;
+						ps = ParserState.EXPRESSION_START_2;
 						callback.handleText( buffer.toString());
 						buffer = new StringBuffer();
 						break;
@@ -106,9 +106,9 @@ public class Parser {
 				}
 				break;
 				
-			case RENDERSTART:
+			case RENDER_START_2:
 				switch( ch) {
-					case ']': ps = ParserState.RENDERSTOPPING;break;
+					case ']': ps = ParserState.RENDER_STOP_1;break;
 					default: buffer.append( (char)ch);
 				}
 				break;	
@@ -119,7 +119,7 @@ public class Parser {
 					case '#': if(buffer.length()==0) ps = ParserState.DECORATOR_SECTIONSTART; break;
 					case '/': if(buffer.length()==0) ps = ParserState.DECORATOR_SECTIONEND; break;
 					case '>': 
-						ps = ParserState.DECORATOR_STOPPING; 
+						ps = ParserState.DECORATOR_STOP_1; 
 						callback.handleDecoratorApplySection( buffer.toString());
 						buffer = new StringBuffer();
 						break;
@@ -132,7 +132,7 @@ public class Parser {
 					case '>':
 						callback.handleDecoratorSectionStart( buffer.toString());
 						buffer = new StringBuffer();
-						ps = ParserState.DECORATOR_STOPPING;
+						ps = ParserState.DECORATOR_STOP_1;
 						break;
 					default: buffer.append( (char)ch);
 				}
@@ -143,7 +143,7 @@ public class Parser {
 					case '>':
 						callback.handleDecoratorSectionEnd( buffer.toString());
 						buffer = new StringBuffer();
-						ps = ParserState.DECORATOR_STOPPING;
+						ps = ParserState.DECORATOR_STOP_1;
 						break;
 					default: buffer.append( (char)ch);
 				}
@@ -154,22 +154,22 @@ public class Parser {
 					case '>': 
 						callback.handleUseDecorator( buffer.toString());
 						buffer = new StringBuffer();
-						ps = ParserState.DECORATOR_USE_STOPPING; 
+						ps = ParserState.DECORATOR_STOP_2; 
 						break;
 					default: buffer.append( (char)ch);
 				}
 				break;
 				
-			case DECORATOR_USE_STOPPING:
+			case DECORATOR_STOP_2:
 				switch( ch) {
 					case '>': 
-						ps = ParserState.DECORATOR_STOPPING;
+						ps = ParserState.DECORATOR_STOP_1;
 						break;
 					default: throw new ParserException("Expected > at line "+line+" in template "+name);				
 				}
 				break;
 				
-			case DECORATOR_STOPPING:
+			case DECORATOR_STOP_1:
 				switch( ch) {
 					case '>': 
 						ps = ParserState.TEXT;
@@ -178,102 +178,102 @@ public class Parser {
 				}
 				break;
 				
-			case EXPSTART:
+			case EXPRESSION_START_2:
 				switch( ch) {
-					case '#': if(buffer.length()==0) ps = ParserState.EXPSECTIONSTART; break;
-					case '/': if(buffer.length()==0) ps = ParserState.EXPSECTIONEND; break;
-					case '^': if(buffer.length()==0) ps = ParserState.EXPINVSECTION; break;
-					case '>': if(buffer.length()==0) ps = ParserState.EXPPARTIAL; break;
-					case '{': if(buffer.length()==0) ps = ParserState.EXPSTARTUNESCAPED; break;
-					case '!': if(buffer.length()==0) ps = ParserState.EXPCOMMENT; break;
-					case '}': ps = ParserState.EXPSTOPPING; break;
+					case '#': if(buffer.length()==0) ps = ParserState.EXPRESSION_SECTION_START; break;
+					case '/': if(buffer.length()==0) ps = ParserState.EXPRESSION_SECTION_END; break;
+					case '^': if(buffer.length()==0) ps = ParserState.EXPRESSION_INV_SECTION; break;
+					case '>': if(buffer.length()==0) ps = ParserState.EXPRESSION_PARTIAL; break;
+					case '{': if(buffer.length()==0) ps = ParserState.EXPRESSION_START_UNESCAPED; break;
+					case '!': if(buffer.length()==0) ps = ParserState.EXPRESSION_COMMENT; break;
+					case '}': 
+						callback.handleVariable( buffer.toString());
+						buffer = new StringBuffer();
+						ps = ParserState.EXPRESSION_STOP_1; 
+					break;
 					default: buffer.append( (char)ch);
 				}
 				break;
 				
-			case EXPSECTIONSTART:
+			case EXPRESSION_SECTION_START:
 				switch( ch) {
 					case '}': 
 						callback.handleSectionStart( buffer.toString());
 						buffer = new StringBuffer();
-						ps = ParserState.EXPSTOPPING; 
+						ps = ParserState.EXPRESSION_STOP_1; 
 						break;
 					default: buffer.append( (char)ch);
 				}
 				break;		
 				
-			case EXPPARTIAL:
+			case EXPRESSION_PARTIAL:
 				switch( ch) {
 					case '}': 
 						callback.handlePartial( buffer.toString());
 						buffer = new StringBuffer();
-						ps = ParserState.EXPSTOPPING; 
+						ps = ParserState.EXPRESSION_STOP_1; 
 						break;
 					default: buffer.append( (char)ch);
 				}
 				break;			
 
-			case EXPINVSECTION:
+			case EXPRESSION_INV_SECTION:
 				switch( ch) {
 					case '}': 
 						callback.handleInvertedSectionStart( buffer.toString());
 						buffer = new StringBuffer();
-						ps = ParserState.EXPSTOPPING; 
+						ps = ParserState.EXPRESSION_STOP_1; 
 						break;
 					default: buffer.append( (char)ch);
 				}
 				break;			
 				
-			case EXPSECTIONEND:
+			case EXPRESSION_SECTION_END:
 				switch( ch) {
 					case '}': 
 						callback.handleSectionEnd( buffer.toString());
 						buffer = new StringBuffer();
-						ps = ParserState.EXPSTOPPING; 
+						ps = ParserState.EXPRESSION_STOP_1; 
 						break;
 					default: buffer.append( (char)ch);
 				}
 				break;			
 				
-			case EXPSTARTUNESCAPED:
+			case EXPRESSION_START_UNESCAPED:
 				switch( ch) {
 					case '}': 
 						callback.handleUnescapedVariable( buffer.toString());
 						buffer = new StringBuffer();
-						ps = ParserState.EXPSTOPUNESCAPED; 
+						ps = ParserState.EXPRESSION_STOP_2; 
 						break;
 					default: buffer.append( (char)ch);
 				}
 				break;
 				
-			case EXPCOMMENT:
+			case EXPRESSION_COMMENT:
 				switch( ch) {
-					case '}': ps = ParserState.EXPSTOPPING; break;
+					case '}': ps = ParserState.EXPRESSION_STOP_1; break;
 				}
 				break;			
 				
-			case EXPSTOPUNESCAPED: 
+			case EXPRESSION_STOP_2: 
 				switch( ch) {
 					case '}': 
-						ps = ParserState.EXPSTOPPING;
+						ps = ParserState.EXPRESSION_STOP_1;
 					break;
 					default: throw new ParserException("Expected } at line "+line+" in template "+name);
 				}
 				break;
 				
-			case EXPSTOPPING:
+			case EXPRESSION_STOP_1:
 				switch( ch) {
-					case '}': 
-						ps = ParserState.TEXT;
-						if( buffer.length()>0)
-							callback.handleVariable( buffer.toString());
-						buffer = new StringBuffer();
+					case '}': ps = ParserState.TEXT;
 					break;
 					default: throw new ParserException("Expected } at line "+line+" in template "+name);
 				}
 				break;
 
-			case RENDERSTOPPING:
+			case RENDER_STOP_1:
 				switch( ch) {
 					case ']': 
 						ps = ParserState.TEXT;
