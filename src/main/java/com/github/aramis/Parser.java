@@ -25,6 +25,7 @@ public class Parser {
 		DECORATOR_START_2,
 		DECORATOR_SECTIONSTART,
 		DECORATOR_SECTIONEND,
+		DECORATOR_SECTIONEND_CLOSE,
 		DECORATOR_STOP_1,
 		DECORATOR_USE,
 		DECORATOR_STOP_2,
@@ -141,11 +142,20 @@ public class Parser {
 			case DECORATOR_SECTIONEND:
 				switch( ch) {
 					case '>':
-						callback.handleDecoratorSectionEnd( buffer.toString());
-						buffer = new StringBuffer();
-						ps = ParserState.DECORATOR_STOP_1;
+						ps = ParserState.DECORATOR_SECTIONEND_CLOSE;
 						break;
 					default: buffer.append( (char)ch);
+				}
+				break;				
+				
+			case DECORATOR_SECTIONEND_CLOSE:
+				switch( ch) {
+					case '>':
+						callback.handleDecoratorSectionEnd( buffer.toString());
+						buffer = new StringBuffer();
+						ps = ParserState.TEXT;
+						break;
+					default: buffer.append('>').append( (char)ch);
 				}
 				break;				
 				

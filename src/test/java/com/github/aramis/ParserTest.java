@@ -58,7 +58,7 @@ public class ParserTest {
 	@Test
 	public void testRenderTag() throws Exception{
 		
-		String test = "xxxx [[ id:123 , perspective:'test', count:4 ]] yyyy";
+		String test = "xxxx [[ 123 | test | count:4, index:2 ]] yyyy";
 		
 		TemplateBuilder tb = new TemplateBuilder( "test1", null, null, null);
 		Parser smp = new Parser( tb);

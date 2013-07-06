@@ -25,28 +25,41 @@ public class TemplateRenderInstruction implements RenderInstruction {
 		this.renderEngine = renderEngine; 
 		this.contentProvider = contentProvider;
 		
-		for( String part : description.split(",")){
+		String[] mainParts = description.split("\\|");
+		id = mainParts[0].trim();
+		
+		if( mainParts.length==1) return;
+
+		String maybePerspective = mainParts[1];
+		String parameters = null;
+		
+		if( maybePerspective.contains(":")) {
+			parameters = maybePerspective;
+		}
+		else {
+			perspective = maybePerspective.trim();
+			if( mainParts.length==3) {
+				parameters = mainParts[2];
+			}
+			else {
+				return;
+			}
+			
+		}
+		
+		
+		for( String part : parameters.split(",")){
 			
 			// TODO: Use MVEL to parse setters as well? setter = value 
 			// eller noe ala: JSON.parse("{" + description + "}");
-			
 			
 			String[] parts = part.split(":");
 			
 			String key = parts[0].trim();
 			String val = parts[1].trim();
 			
-			if( "id".equals( key)){
-				id = val;
-			}
-			else
-			if( "perspective".equals( key)){
-				perspective = val;
-			}
-			else {
-				Object targetExpression = MVEL.compileExpression( val); 
-				transferExpressions.put( key, targetExpression);
-			}
+			Object targetExpression = MVEL.compileExpression( val); 
+			transferExpressions.put( key, targetExpression);
 		}
 	}
 	

@@ -1,0 +1,12 @@
+{{ title }}
+
+
+[[# id:image234 ]]
+
+	<img id='{{imageID}}' src='{{src}}' />
+
+[[/]]
+
+{{ body }}
+
+
