@@ -44,9 +44,7 @@ public class TemplateRenderInstruction implements RenderInstruction {
 			else {
 				return;
 			}
-			
 		}
-		
 		
 		for( String part : parameters.split(",")){
 			
