@@ -29,13 +29,19 @@ Usage:
 
 To render content, provide the ID to the desired content. 
 ```
-[[ id:contentId ]]
+[[ content-ID ]]
 ```
 
-To render content in a different perspective, add the parameter 'perspective' 
+To render content in a different perspective, add the name of the perspective, separated with a pipe |
 ```
-[[ id:contentId, perspective:'list' ]]
+[[ content-ID | list ]]
 ```
+
+You can also include parameters when rendering another content:
+```
+[[ content-ID | list | index:1, caption:'lorem ipsum...' ]]
+```
+
 
 
 &lt;&lt;decorator>>

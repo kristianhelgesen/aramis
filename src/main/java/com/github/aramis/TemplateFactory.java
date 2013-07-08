@@ -15,6 +15,9 @@ public class TemplateFactory {
 	ContentProvider contentProvider;
 	RenderEngine renderEngine;
 	
+	public TemplateFactory() {	
+	}
+	
 	public TemplateFactory( RenderEngine renderEngine, ContentProvider contentProvider) {
 		this.renderEngine = renderEngine;
 		this.contentProvider = contentProvider;

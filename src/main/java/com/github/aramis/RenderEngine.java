@@ -14,7 +14,6 @@ public class RenderEngine {
 	ContentProvider contentProvider;
 	TemplateFactory templateFactory;
 
-
 	public RenderEngine( ContentProvider contentProvider) {
 		this.contentProvider = contentProvider;
 		templateFactory = new TemplateFactory( this, contentProvider);

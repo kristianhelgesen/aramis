@@ -1,17 +1,12 @@
 package com.github.aramis;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
+
 import java.io.ByteArrayOutputStream;
 
 import org.junit.Test;
-
-import com.github.aramis.ContentProvider;
-import com.github.aramis.Context;
-import com.github.aramis.RenderEngine;
-import com.github.aramis.Template;
-import com.github.aramis.TemplateFactory;
-
-import static org.hamcrest.Matchers.*; 
-import static org.junit.Assert.*;
 
 public class DecoratorTest {
 
@@ -20,10 +15,7 @@ public class DecoratorTest {
 	@Test
 	public void testDecorator() throws Exception{
 		
-		ContentProvider cp = new MockContentProvider();
-		RenderEngine renderEngine = new RenderEngine( cp);
-		
-		TemplateFactory templateFactory = new TemplateFactory( renderEngine, cp);
+		TemplateFactory templateFactory = new TemplateFactory();
 		
 		Template template = templateFactory.getTemplate( "/templates/decorate-me.art");
 		Context context = new Context();

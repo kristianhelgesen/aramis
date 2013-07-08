@@ -1,7 +1,7 @@
 {{ title }}
 
 
-[[ id:image234, perspective:inline, width:255 ]]
+[[ image234 | inline | width:255 ]]
 
 
 {{ body }}
