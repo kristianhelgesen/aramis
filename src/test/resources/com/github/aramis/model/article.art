@@ -1,7 +1,9 @@
 {{ title }}
 
 
-[[ image234 | inline | width:255 ]]
+{{! image returns article.getImage() }}
+[[ image | inline | width:255 ]]
+
 
 
 {{ body }}

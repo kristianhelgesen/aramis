@@ -93,7 +93,7 @@ public class RenderDispatcher implements Filter {
 		Object resolvedContent = urlResolver.urlToContent(uri);
 		if( resolvedContent!=null) {
 			OutputStream os = res.getOutputStream();
-			renderEngine.render( os, resolvedContent, "", new HashMap<String,Object>());
+			renderEngine.renderContent( os, resolvedContent, null, "", new HashMap<String,Object>());
 		}
 		else {
 			filterChain.doFilter( req, res);

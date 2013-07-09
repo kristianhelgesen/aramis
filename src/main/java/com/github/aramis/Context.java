@@ -8,6 +8,7 @@ public class Context {
 	private Context parent;
 	
 	private Object model;
+	private Object reference;
 	private Object controller;
 	private Map<String,Object> parameters = new HashMap<String,Object>();
 	
@@ -33,6 +34,14 @@ public class Context {
 
 	public void setController(Object controller) {
 		this.controller = controller;
+	}
+
+	public Object getReference() {
+		return reference;
+	}
+
+	public void setReference(Object reference) {
+		this.reference = reference;
 	}
 
 	public Map<String, Object> getParameters() {

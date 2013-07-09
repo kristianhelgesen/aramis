@@ -16,7 +16,7 @@ public class TemplateRenderInstruction implements RenderInstruction {
 
 	RenderEngine renderEngine;
 	ContentProvider contentProvider;
-	String id;
+	Object contentRefExpr;
 	String perspective = "";
 	Map<String,Object> transferExpressions = new HashMap<String,Object>(); 
 	
@@ -26,7 +26,8 @@ public class TemplateRenderInstruction implements RenderInstruction {
 		this.contentProvider = contentProvider;
 		
 		String[] mainParts = description.split("\\|");
-		id = mainParts[0].trim();
+		String contentRefExprStr = mainParts[0].trim();
+		contentRefExpr = MVEL.compileExpression( contentRefExprStr);
 		
 		if( mainParts.length==1) return;
 
@@ -66,6 +67,8 @@ public class TemplateRenderInstruction implements RenderInstruction {
 	@Override
 	public Context apply(OutputStream os, Context context) throws IOException{
 		
+		Object contentRef = Util.lookupProperty( contentRefExpr, context);
+		
 		Map<String,Object> transferValues = new HashMap<String,Object>(); // <compiled expression, resolved value>
 		
 		for( Map.Entry<String,Object> entry : transferExpressions.entrySet() ){
@@ -77,7 +80,7 @@ public class TemplateRenderInstruction implements RenderInstruction {
 			transferValues.put( targetProperty, targetObj);
 		}
 		
-		renderEngine.render( os, id, perspective, transferValues);
+		renderEngine.render( os, contentRef, perspective, transferValues);
 		
 		return context;
 	}

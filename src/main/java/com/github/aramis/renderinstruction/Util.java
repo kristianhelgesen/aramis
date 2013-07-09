@@ -27,10 +27,15 @@ class Util {
         	property = executeExpression( compiledExpression, localContext.getParameters());
         	localContext = localContext.getParent();
         }
-        
+
         // check controller on root only
         if( property==null) {
         	property = executeExpression( compiledExpression, rootContext.getController());
+        }
+        
+        // check reference on root only
+        if( property==null) {
+        	property = executeExpression( compiledExpression, rootContext.getReference());
         }
 
         // finally, check root model

@@ -19,19 +19,20 @@ public class RenderEngine {
 		templateFactory = new TemplateFactory( this, contentProvider);
 	}
 	
-	public void render ( OutputStream os, String id){
-		render( os, id, "", null);
+	public void render ( OutputStream os, Object reference){
+		render( os, reference, "", null);
 	}
 	
-	public void render ( OutputStream os, String id, String perspective, Map<String,Object> transferValues){
-		Object content = contentProvider.getContent( id);
-		render( os, content, perspective, transferValues);
+	public void render ( OutputStream os, Object reference, String perspective, Map<String,Object> transferValues){
+		Object content = contentProvider.getContent( reference);
+		renderContent( os, content, reference, perspective, transferValues);
 	}
 
-	public void render ( OutputStream os, Object content, String perspective, Map<String,Object> transferValues){
+	public void renderContent ( OutputStream os, Object content, Object reference, String perspective, Map<String,Object> transferValues){
 		
 		Context templateContext = new Context();
 		templateContext.setModel( content);
+		templateContext.setReference( reference);
 		
 		String className = content.getClass().getSimpleName();
 		String classPackageName = content.getClass().getPackage().getName();

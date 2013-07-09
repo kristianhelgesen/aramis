@@ -11,12 +11,13 @@ import com.github.aramis.model.Image;
 public class MockContentProvider extends ContentProvider{
 	
 	
-	Map<String,Object> content = new HashMap<String,Object>();
+	Map<Object,Object> content = new HashMap<Object,Object>();
 
 	public MockContentProvider() {
 		content.put("123", new MockContent());
 		content.put("article123", new Article());
 		content.put("image234", new Image());
+		content.put( Article.imageRef, new Image());
 	}
 	
 
