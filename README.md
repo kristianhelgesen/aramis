@@ -9,7 +9,7 @@ The template language has three different flavors (or mustaches).
 ------
 Plain mustache templating. An excelent description here: http://mustache.github.io/mustache.5.html
 
-I brief:
+In brief:
 
 | Expression | Description |
 |-------|--------|
@@ -94,7 +94,8 @@ Run:
 ContentProvider contentProvider = new MyContentProvider();
 RenderEngine renderEngine = new RenderEngine( contentProvider);
 
-renderEngine.render( System.out, "article123");
+String articleID = "article123";
+renderEngine.render( System.out, articleID);
 ```
 
 

@@ -4,10 +4,44 @@
 	<groupId>com.github.aramis</groupId>
 	<artifactId>aramis</artifactId>
 	<version>1.0</version>
-
-
+	<packaging>jar</packaging>
+	
+	<name>Aramis templating engine</name>
+	<description>
+		Aramis is a light weight templating engine, extending the Mustache template syntax. 
+		Support for expressions, content rendering, decorator templates, content controllers, view perspectives.
+	</description>
+	<url>https://github.com/kristianhelgesen/aramis</url>
+	<licenses>
+	  <license>
+	    <name>The Apache Software License, Version 2.0</name>
+	    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+	    <distribution>repo</distribution>
+	    <comments>A business-friendly OSS license</comments>
+	  </license>
+	</licenses>
+	<scm>
+		<url>https://github.com/kristianhelgesen/aramis</url>
+		<connection>scm:git:git@github.com:kristianhelgesen/aramis.git</connection>
+	</scm>
+	<developers>
+		<developer>
+		  <id>kristianhelgesen</id>
+		  <name>Kristian Helgesen</name>
+		  <email>kristian.helgesen@gmail.com</email>
+		  <organization>Miles AS</organization>
+		  <organizationUrl>http://miles.no</organizationUrl>
+		  <roles>
+		    <role>architect</role>
+		    <role>developer</role>
+		  </roles>
+		  <properties>
+		    <picUrl>http://www.gravatar.com/avatar/d837e12627bf8745138cb4d1c780f266.jpg?s=100</picUrl>
+		  </properties>
+		</developer>
+	</developers>
+	
 	<dependencies>
-
 		<dependency> 
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -57,6 +91,58 @@
             		
 		
 	</dependencies>
-
+	
+	
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>		
+	</build>	
+	
 </project>
 
