@@ -28,6 +28,7 @@
 	<scm>
 		<url>https://github.com/kristianhelgesen/aramis</url>
 		<connection>scm:git:git@github.com:kristianhelgesen/aramis.git</connection>
+		<developerConnection>scm:git:git@github.com:kristianhelgesen/aramis.git</developerConnection>
 	</scm>
 	<developers>
 		<developer>
