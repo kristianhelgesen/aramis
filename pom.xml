@@ -5,7 +5,12 @@
 	<artifactId>aramis</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+  	
 	<name>Aramis templating engine</name>
 	<description>
 		Aramis is a light weight templating engine, extending the Mustache template syntax. 
