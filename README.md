@@ -74,7 +74,15 @@ In your template, define the decorator at the top, and the content of the sectio
 Installation
 ==============
 
-For now, you'll have to clone this repo, and mvn install the artifact..
+Add the aramis dependency to you pom
+
+```xml
+		<dependency>
+		    <groupId>com.github.kristianhelgesen.aramis</groupId>
+		    <artifactId>aramis</artifactId>
+		    <version>1.0</version>
+		</dependency>			
+```
 
 Setup:
 
