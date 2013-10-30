@@ -1,6 +1,7 @@
 package com.github.aramis;
 
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.util.Map;
 
 import org.mvel2.MVEL;
@@ -37,7 +38,7 @@ public class RenderEngine {
 		String className = content.getClass().getSimpleName();
 		String classPackageName = content.getClass().getPackage().getName();
 		
-		initController(content, templateContext, className);
+		initController(content, reference, templateContext, className);
 		
 		applyValues( templateContext, transferValues);
 		
@@ -59,8 +60,8 @@ public class RenderEngine {
 	}
 
 
-	@SuppressWarnings({"unchecked","rawtypes"})
-	private void initController(Object content, Context templateContext,
+	@SuppressWarnings({"rawtypes"})
+	private void initController(Object content, Object reference, Context templateContext,
 			String className) {
 		
 		String controllerPackageName = content.getClass().getPackage().getName();
@@ -70,19 +71,56 @@ public class RenderEngine {
 		try {
 			String controllerFQName = controllerPackageName + "."+ controllerClassName;
 			Class controllerClass = Class.forName( controllerFQName);
-			controller = controllerClass.newInstance();
-			if( controller instanceof ContentAware) {
-				((ContentAware)controller).setContent(content);
+			
+			controller = initControllerWithContentAndReference(content,	reference, controller, controllerClass);
+			if( controller==null){
+				controller = initControllerWithContent(content, controller,	controllerClass);
 			}
+			if( controller==null) {
+				controller = controllerClass.newInstance();
+			}
+			
 		} catch (ClassNotFoundException e) {
 			logger.info( "No controller ({}) found in package {} for model class {} ", controllerClassName, controllerPackageName, className);
 		} catch (InstantiationException e) {
 			logger.error("Error instantiating class",e);
 		} catch (IllegalAccessException e) {
 			logger.error("Error instantiating class",e);
+		} catch (SecurityException e) {
+			logger.error("Error instantiating class",e);
+		} catch (IllegalArgumentException e) {
+			logger.error("Error instantiating class",e);
 		}
 		
 		templateContext.setController( controller);
+	}
+
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Object initControllerWithContent( Object content, Object controller, Class controllerClass)  {
+		try {
+			Constructor controllerContentConstructor = controllerClass.getConstructor(content.getClass());
+			if( controllerContentConstructor!=null){
+				controller = controllerContentConstructor.newInstance( content);
+			}
+			return controller;
+		} catch (Exception e) {
+			logger.debug("Error instantiating controller with content and reference",e);
+			return null;
+		}
+	}
+
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Object initControllerWithContentAndReference(Object content, Object reference, Object controller, Class controllerClass) {
+		try{
+			Constructor controllerRefConstructor = controllerClass.getConstructor(content.getClass(),reference.getClass());
+			if( controllerRefConstructor!=null) {
+				controller = controllerRefConstructor.newInstance( content, reference);
+			}
+			return controller;
+		} catch (Exception e) {
+			logger.debug("Error instantiating controller with content and reference",e);
+			return null;
+		}
 	}
 	
 

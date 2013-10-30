@@ -6,13 +6,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
-
 import org.junit.Test;
 import org.mvel2.MVEL;
 
-import com.github.aramis.ContentProvider;
-import com.github.aramis.RenderEngine;
 import com.github.aramis.model.Article;
+import com.github.aramis.model.Article.ImageReference;
 import com.github.aramis.model.Image2;
 import com.github.aramis.model.Image2Controller;
 import com.github.aramis.model.Model1;
@@ -63,7 +61,7 @@ public class RenderTest {
 		RenderEngine renderEngine = new RenderEngine( cp);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		renderEngine.renderContent( baos, new Image2(), null, "", new HashMap<String,Object>());
+		renderEngine.renderContent( baos, new Image2(), new ImageReference(), "", new HashMap<String,Object>());
 		
 		assertEquals( "<img id='image1' src='http://images/image1' />", baos.toString().trim());
 	
@@ -71,8 +69,7 @@ public class RenderTest {
 	
 
 	public static void main(String[] args) {
-		Image2Controller ctrl = new Image2Controller();
-		ctrl.setContent( new Image2());
+		Image2Controller ctrl = new Image2Controller(new Image2(),new ImageReference());
 		
 		Object compiledExpression = MVEL.compileExpression("src"); 
 		System.out.println( MVEL.executeExpression( compiledExpression, ctrl));
