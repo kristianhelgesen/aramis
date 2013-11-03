@@ -155,7 +155,9 @@ public class Parser {
 						buffer = new StringBuffer();
 						ps = ParserState.TEXT;
 						break;
-					default: buffer.append('>').append( (char)ch);
+					default: 
+						buffer.append('>').append( (char)ch);
+						ps = ParserState.DECORATOR_SECTIONEND;
 				}
 				break;				
 				

@@ -112,6 +112,7 @@ public class RenderEngine {
 	@SuppressWarnings({"rawtypes","unchecked"})
 	private Object initControllerWithContentAndReference(Object content, Object reference, Object controller, Class controllerClass) {
 		try{
+			if( reference==null) return null;
 			Constructor controllerRefConstructor = controllerClass.getConstructor(content.getClass(),reference.getClass());
 			if( controllerRefConstructor!=null) {
 				controller = controllerRefConstructor.newInstance( content, reference);

@@ -102,8 +102,8 @@ Run:
 ContentProvider contentProvider = new MyContentProvider();
 RenderEngine renderEngine = new RenderEngine( contentProvider);
 
-String articleID = "article123";
-renderEngine.render( System.out, articleID);
+String articleReference = "article123";
+renderEngine.render( System.out, articleReference);
 ```
 
 
@@ -120,6 +120,14 @@ article.art
 article-list.art
 ```
 
+
+
+To get the model object injected into the controller, simply add the model to the controllers constructor.
+```java
+public ArticleController( Article a) {
+  ...
+}
+```
 
 
 
