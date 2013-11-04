@@ -35,7 +35,7 @@ public class Tag {
 
 	@Override
 	public String toString() {
-		return tagdef.startToken.charseq + value + tagdef.endToken.charseq;
+		return tagdef.startToken.charseq +"! "+ value + " !"+ tagdef.endToken.charseq;
 	}
  
 }

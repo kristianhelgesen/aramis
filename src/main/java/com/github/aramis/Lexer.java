@@ -75,9 +75,15 @@ public class Lexer {
 				searchTokens = new HashSet<Token>(fromTextTokens);
 			}
 			
-			buf = new StringBuffer( matchStr.substring( match.charseq.length()) + ch); // keep text after token match
 			match = null;
 			matchStr = "";
+			buf = new StringBuffer();
+
+			// re-process text after token match
+			for( Character ch2 : matchStr.substring( match.charseq.length()).toCharArray()) {
+				process(ch2);
+			}
+			process(ch);
 		}
 		
 	}
@@ -101,12 +107,18 @@ public class Lexer {
 	}
 	
 	private void processTag(Tag t) {
+		switch( t.tagdef){
+		case RENDER:
+			break;
+		case DECORATOR:
+			break;
+		}
 		System.out.println("TAG:  " + t);
 	}
 	
 	public static void main(String[] args) {
 		
-		String s = "Before [[ in ]] after [";
+		String s = "Before [[[ in ]] after [";
 		
 		Lexer l = new Lexer();
 		
