@@ -32,7 +32,6 @@ public class RenderDispatcher implements Filter {
 	private String urlResolverClass;
 	
 
-	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		
 		System.out.println("init");
@@ -79,7 +78,6 @@ public class RenderDispatcher implements Filter {
 	}
 
 	
-	@Override
 	public void doFilter( ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
 		
 		String uri = getPlainRequestURI( (HttpServletRequest)req);
@@ -116,7 +114,6 @@ public class RenderDispatcher implements Filter {
 	}	
 
 
-	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		

@@ -34,7 +34,18 @@ public class Lexer {
 		buf = new StringBuffer();
 		
 		for( char ch : s.toCharArray()) {
-			process(ch);
+			try {
+				process(ch);
+			} catch (Exception e) {
+				System.out.println("ch: "+ch);
+				System.out.println("buf: "+buf);
+				System.out.println("match: "+match);
+				System.out.println("matchStr: "+matchStr);
+				System.out.println("searchTokens: "+searchTokens);
+				System.out.println("currentTagType: "+currentTagType);
+				e.printStackTrace();
+				break;
+			}
 		}
 		
 		processText( buf.toString()+matchStr);
@@ -50,13 +61,13 @@ public class Lexer {
 			buf.append(ch);
 			return;
 		}
-		
+
 		// one or more matching tokens
 		if( tokenMatches.size()>0) {
 			matchStr += ch;
 			return;
 		}
-				
+
 		// token found
 		if( tokenMatches.size()==0 && matchStr.length()>0) {
 			
@@ -74,16 +85,16 @@ public class Lexer {
 				searchTokens = new HashSet<Token>();
 				searchTokens = new HashSet<Token>(fromTextTokens);
 			}
-			
+
+			String unprocessed = matchStr.substring( match.charseq.length()) + ch;
 			match = null;
 			matchStr = "";
 			buf = new StringBuffer();
 
 			// re-process text after token match
-			for( Character ch2 : matchStr.substring( match.charseq.length()).toCharArray()) {
+			for( Character ch2 : unprocessed.toCharArray()) {
 				process(ch2);
 			}
-			process(ch);
 		}
 		
 	}
@@ -118,7 +129,7 @@ public class Lexer {
 	
 	public static void main(String[] args) {
 		
-		String s = "Before [[[ in ]] after [";
+		String s = "Before [[[ in ]] after [{{asdf}}";
 		
 		Lexer l = new Lexer();
 		

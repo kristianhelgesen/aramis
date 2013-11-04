@@ -20,7 +20,6 @@ public class DecoratorRenderInstruction implements RenderInstruction {
 		this.decorateMe = decorateMe;
 	}
 
-	@Override
 	public Context apply(OutputStream os, Context context) throws IOException{
 		
 		decorateMe.applySection( decorateSectionName, os, context);

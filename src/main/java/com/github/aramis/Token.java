@@ -10,4 +10,11 @@ public class Token {
 		this.charseq = charseq;
 		this.parent = parent;
 	}
+
+	@Override
+	public String toString() {
+		return charseq;
+	}
+	
+	
 }

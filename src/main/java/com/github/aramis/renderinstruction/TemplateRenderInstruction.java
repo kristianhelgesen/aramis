@@ -64,7 +64,6 @@ public class TemplateRenderInstruction implements RenderInstruction {
 	
 
 	
-	@Override
 	public Context apply(OutputStream os, Context context) throws IOException{
 		
 		Object contentRef = Util.lookupProperty( contentRefExpr, context);

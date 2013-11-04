@@ -14,7 +14,6 @@ public class TextRenderInstruction implements RenderInstruction {
 		textBytes = text.getBytes();
 	}
 
-	@Override
 	public Context apply(OutputStream os, Context context) throws IOException{
 		os.write( textBytes);
 		return context;

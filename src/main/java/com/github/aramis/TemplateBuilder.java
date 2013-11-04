@@ -36,43 +36,36 @@ public class TemplateBuilder implements ParserCallback{
 	}
 
 	
-	@Override
 	public void handleUnescapedVariable(String var) {
 		addRenderInstruction( new MvelRenderInstruction( var, false));
 	}
 
-	@Override
 	public void handleVariable(String var) {
 		addRenderInstruction( new MvelRenderInstruction( var));
 	}
 
-	@Override
 	public void handleText(String text) {
 		if( text.length()>0){
 			addRenderInstruction( new TextRenderInstruction( text));
 		}
 	}
 
-	@Override
 	public void handleRender(String render) {
 		addRenderInstruction( new TemplateRenderInstruction(renderEngine,contentProvider,render));
 	}
 
-	@Override
 	public void handleSectionStart(String section) {
 		SectionRenderInstruction sri = new SectionRenderInstruction( section);
 		addRenderInstruction( sri);
 		stack.push( sri);
 	}
 
-	@Override
 	public void handleInvertedSectionStart(String section) {
 		SectionInvRenderInstruction siri = new SectionInvRenderInstruction( section);
 		addRenderInstruction( siri);
 		stack.push( siri);
 	}
 
-	@Override
 	public void handleSectionEnd(String string) {
 		stack.pop();
 	}
@@ -82,7 +75,6 @@ public class TemplateBuilder implements ParserCallback{
 	}
 
 	
-	@Override
 	public void handleUseDecorator(String decoratorTemplateName) {
 		if( template.getRenderInsturctions().size()>0) {
 			throw new ParserException("tag <<<"+decoratorTemplateName+">>> must be first in template");
@@ -105,7 +97,6 @@ public class TemplateBuilder implements ParserCallback{
 		}
 	}
 	
-	@Override
 	public void handlePartial( String partial) {
 		partial = partial.trim();
 		Template partialTemplate = templateFactory.getTemplate( partial);
@@ -115,17 +106,14 @@ public class TemplateBuilder implements ParserCallback{
 	}
 
 	
-	@Override
 	public void handleDecoratorApplySection(String decorateSectionName) {
 		addRenderInstruction( new DecoratorRenderInstruction( decorateSectionName));
 	}
 
-	@Override
 	public void handleDecoratorSectionStart(String decoratorSectionName) {
 		this.decoratorSectionName = decoratorSectionName;
 	}
 
-	@Override
 	public void handleDecoratorSectionEnd(String decoratorSectionName) {
 		this.decoratorSectionName = null;
 	}

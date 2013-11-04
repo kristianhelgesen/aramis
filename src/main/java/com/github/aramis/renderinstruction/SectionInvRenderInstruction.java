@@ -26,7 +26,6 @@ public class SectionInvRenderInstruction implements RenderInstruction, RenderIns
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public Context apply(OutputStream os, final Context context) throws IOException{
 
         Object property = Util.lookupProperty( compiledExpression, context);
@@ -65,9 +64,7 @@ public class SectionInvRenderInstruction implements RenderInstruction, RenderIns
 		}
 	}
 	
-
-
-	@Override
+	
 	public void addRenderInstruction(RenderInstruction r, String sectionName) {
 		ri.add(r);
 	}
