@@ -37,31 +37,55 @@ public class Lexer {
 			try {
 				process(ch);
 			} catch (Exception e) {
-				System.out.println("ch: "+ch);
-				System.out.println("buf: "+buf);
-				System.out.println("match: "+match);
-				System.out.println("matchStr: "+matchStr);
-				System.out.println("searchTokens: "+searchTokens);
-				System.out.println("currentTagType: "+currentTagType);
+				debugPrint(ch);
 				e.printStackTrace();
 				break;
 			}
 		}
+		process(' '); // processing one last whitespace to flush tokens at the very end
 		
-		processText( buf.toString()+matchStr);
+		debugPrint(' ');
+		
+//		processText( buf.toString()+matchStr);
+	}
+
+	private void debugPrint(char ch) {
+		System.out.println("---------------------------------------------------------------");
+		System.out.println("ch: "+ch);
+		System.out.println("buf: "+buf);
+		System.out.println("match: "+match);
+		System.out.println("matchStr: "+matchStr);
+		System.out.println("searchTokens: "+searchTokens);
+		System.out.println("currentTagType: "+currentTagType);
 	}
 	
 	
 	private void process(char ch) {
 
 		Set<Token> tokenMatches = findMatchingTokens(ch);
+//		debugPrint(ch);
+//		System.out.println(tokenMatches);
 
 		// no matching tokens
-		if( tokenMatches.size()==0 && matchStr.length()==0) {
-			buf.append(ch);
+		if( tokenMatches.size()==0 && match==null && matchStr.length()==0) {
+			buf.append( ch);
 			return;
 		}
 
+		
+		// no matching tokens, but matchStr contains some data that must be processed
+		if( tokenMatches.size()==0 && match==null && matchStr.length()>0) {
+			String unmatched = matchStr + ch;
+			buf.append( unmatched.charAt(0));
+			matchStr = "";
+			
+			for( char ch2 : unmatched.substring(1).toCharArray()) {
+				process( ch2);
+			}
+			return;
+		}
+		
+		
 		// one or more matching tokens
 		if( tokenMatches.size()>0) {
 			matchStr += ch;
@@ -69,7 +93,7 @@ public class Lexer {
 		}
 
 		// token found
-		if( tokenMatches.size()==0 && matchStr.length()>0) {
+		if( tokenMatches.size()==0 && match!=null) {
 			
 			String text = buf.toString();
 			if( currentTagType==null) {
@@ -114,7 +138,8 @@ public class Lexer {
 	}
 	
 	private void processText(String text) {
-		System.out.println("TEXT: " + text);
+		if( text.length()==0) return;
+		System.out.println("TEXT: " + text+"|");
 	}
 	
 	private void processTag(Tag t) {
@@ -124,12 +149,12 @@ public class Lexer {
 		case DECORATOR:
 			break;
 		}
-		System.out.println("TAG:  " + t);
+		System.out.println("TAG:  " + t+"|");
 	}
 	
 	public static void main(String[] args) {
 		
-		String s = "Before [[[ in ]] after [{{asdf}}";
+		String s = "Before [[[ in ]] after [{{asdf}}<<oooo>>";
 		
 		Lexer l = new Lexer();
 		
