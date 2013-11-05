@@ -3,9 +3,14 @@ package com.github.aramis;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.aramis.Tag.TagType;
 
 public class Lexer {
+	private static final Logger logger = LoggerFactory.getLogger(Lexer.class);
+
 
 	StringBuffer buf;
 	Token match;
@@ -20,7 +25,6 @@ public class Lexer {
 		for( TagType tagType : TagType.values()){
 			fromTextTokens.add( tagType.startToken);
 		}
-		clear();
 	}
 	
 	private void clear() {
@@ -31,40 +35,25 @@ public class Lexer {
 	}
 
 	private void process(String s) {
+		clear();
 		buf = new StringBuffer();
 		
 		for( char ch : s.toCharArray()) {
 			try {
 				process(ch);
 			} catch (Exception e) {
-				debugPrint(ch);
-				e.printStackTrace();
+				logState(ch);
+				logger.error( "Error parsing template", e);
 				break;
 			}
 		}
-		process(' '); // processing one last whitespace to flush tokens at the very end
 		
-		debugPrint(' ');
-		
-//		processText( buf.toString()+matchStr);
+		wrapItUp();
 	}
-
-	private void debugPrint(char ch) {
-		System.out.println("---------------------------------------------------------------");
-		System.out.println("ch: "+ch);
-		System.out.println("buf: "+buf);
-		System.out.println("match: "+match);
-		System.out.println("matchStr: "+matchStr);
-		System.out.println("searchTokens: "+searchTokens);
-		System.out.println("currentTagType: "+currentTagType);
-	}
-	
 	
 	private void process(char ch) {
 
 		Set<Token> tokenMatches = findMatchingTokens(ch);
-//		debugPrint(ch);
-//		System.out.println(tokenMatches);
 
 		// no matching tokens
 		if( tokenMatches.size()==0 && match==null && matchStr.length()==0) {
@@ -75,13 +64,7 @@ public class Lexer {
 		
 		// no matching tokens, but matchStr contains some data that must be processed
 		if( tokenMatches.size()==0 && match==null && matchStr.length()>0) {
-			String unmatched = matchStr + ch;
-			buf.append( unmatched.charAt(0));
-			matchStr = "";
-			
-			for( char ch2 : unmatched.substring(1).toCharArray()) {
-				process( ch2);
-			}
+			reprocessMatchStr(ch);
 			return;
 		}
 		
@@ -120,7 +103,25 @@ public class Lexer {
 				process(ch2);
 			}
 		}
+	}
+
+	
+	private void wrapItUp() {
+		process(' '); // processing one last whitespace to flush tokens at the very end
+		buf.deleteCharAt( buf.length()-1); // and removes the same space from buffer.
+		processText( buf.toString()); // and finally sends the remaining text to processing
+	}
+
+
+	private void reprocessMatchStr(Character ch) {
+		String unmatched = matchStr + ch;
 		
+		buf.append( unmatched.charAt(0));
+		matchStr = "";
+		
+		for( char ch2 : unmatched.substring(1).toCharArray()) {
+			process( ch2);
+		}
 	}
 
 	
@@ -136,11 +137,13 @@ public class Lexer {
 		}
 		return tokenMatch;
 	}
+
 	
 	private void processText(String text) {
 		if( text.length()==0) return;
 		System.out.println("TEXT: " + text+"|");
 	}
+	
 	
 	private void processTag(Tag t) {
 		switch( t.tagdef){
@@ -152,13 +155,22 @@ public class Lexer {
 		System.out.println("TAG:  " + t+"|");
 	}
 	
+	
+	private void logState(char ch) {
+		logger.debug("---------------------------------------------------------------");
+		logger.debug("ch: "+ch);
+		logger.debug("buf: "+buf);
+		logger.debug("match: "+match);
+		logger.debug("matchStr: "+matchStr);
+		logger.debug("searchTokens: "+searchTokens);
+		logger.debug("currentTagType: "+currentTagType);
+	}
+	
+	
 	public static void main(String[] args) {
 		
-		String s = "Before [[[ in ]] after [{{asdf}}<<oooo>>";
-		
 		Lexer l = new Lexer();
-		
-		l.process( s);
+		l.process( "Before [[[ in ]] after [{{asdf}}<<oooo>>");
 	}
 	
 }
