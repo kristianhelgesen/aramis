@@ -7,12 +7,13 @@ import java.io.ByteArrayInputStream;
 import org.junit.Test;
 
 import com.github.aramis.renderinstruction.DecoratorRenderInstruction;
+import com.github.aramis.renderinstruction.MvelRenderInstruction;
 import com.github.aramis.renderinstruction.RenderInstruction;
 import com.github.aramis.renderinstruction.TemplateRenderInstruction;
 import com.github.aramis.renderinstruction.TextRenderInstruction;
 
 
-public class ParserTest {
+public class LexerTest {
 
 	
 	@Test
@@ -23,9 +24,9 @@ public class ParserTest {
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp);
 		TemplateBuilder tb = new TemplateBuilder( "test", renderEngine, cp, null);
-		Parser smp = new Parser( tb);
+		Lexer smp = new Lexer( tb);
 		
-		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));
+		smp.process( new ByteArrayInputStream(test.getBytes()));
 		
 	
 		Template template = tb.getTemplate();
@@ -41,9 +42,9 @@ public class ParserTest {
 		String test = "{{test}}";
 		
 		TemplateBuilder tb = new TemplateBuilder( "test", null, null, null);
-		Parser smp = new Parser( tb);
+		Lexer smp = new Lexer( tb);
 		
-		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));
+		smp.process( new ByteArrayInputStream(test.getBytes()));
 		
 	
 		Template template = tb.getTemplate();
@@ -61,9 +62,9 @@ public class ParserTest {
 		String test = "xxxx [[ 123 | test | count:4, index:2 ]] yyyy";
 		
 		TemplateBuilder tb = new TemplateBuilder( "test1", null, null, null);
-		Parser smp = new Parser( tb);
+		Lexer smp = new Lexer( tb);
 		
-		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));
+		smp.process( new ByteArrayInputStream(test.getBytes()));
 	
 		Template template = tb.getTemplate();
 		
@@ -100,21 +101,52 @@ public class ParserTest {
 		
 		TemplateFactory tf = new TemplateFactory(null,null);
 		TemplateBuilder tb = new TemplateBuilder( "test1", null, null, tf);
-		Parser smp = new Parser( tb);
+		Lexer smp = new Lexer( tb);
 		
-		smp.parse( "test", new ByteArrayInputStream(test.getBytes()));		
+		smp.process( new ByteArrayInputStream(test.getBytes()));		
 	
 		Template template = tb.getTemplate();
 
-		System.out.println(template.getRenderInsturctions());
 		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(0).getClass());
 		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
 		assertEquals( "TextRenderInstruction(text123)", template.getRenderInsturctions().get(1).toString());
 		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(2).getClass());
-		
-		
 	}
 	
+	@Test
+	public void testTagAtEnd() throws Exception {
+		
+		String test = "xxxx {{ test }}";
+		
+		TemplateFactory tf = new TemplateFactory(null,null);
+		TemplateBuilder tb = new TemplateBuilder( "test2", null, null, tf);
+		Lexer smp = new Lexer( tb);
+		
+		smp.process( new ByteArrayInputStream( test.getBytes()));		
 	
+		Template template = tb.getTemplate();
+
+		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(0).getClass());
+		assertEquals( MvelRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
+	}
+	
+	@Test
+	public void testCharacterFromTagAtEnd() throws Exception {
+		
+		String test = "xxxx {{ test }}[";
+		
+		TemplateFactory tf = new TemplateFactory(null,null);
+		TemplateBuilder tb = new TemplateBuilder( "test2", null, null, tf);
+		Lexer smp = new Lexer( tb);
+		
+		smp.process( new ByteArrayInputStream( test.getBytes()));		
+	
+		Template template = tb.getTemplate();
+
+		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(0).getClass());
+		assertEquals( MvelRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
+		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(2).getClass());
+		assertEquals( "TextRenderInstruction([)", template.getRenderInsturctions().get(2).toString());
+	}
 	
 }

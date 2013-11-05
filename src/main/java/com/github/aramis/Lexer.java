@@ -1,5 +1,7 @@
 package com.github.aramis;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,9 +20,10 @@ public class Lexer {
 	Set<Token> fromTextTokens;
 	Set<Token> searchTokens;
 	TagType currentTagType;
-
+	ParserCallback callback;
 	
-	public Lexer() {
+	public Lexer( ParserCallback callback) {
+		this.callback = callback;
 		fromTextTokens = new HashSet<Token>();
 		for( TagType tagType : TagType.values()){
 			fromTextTokens.add( tagType.startToken);
@@ -34,19 +37,20 @@ public class Lexer {
 		searchTokens = new HashSet<Token>(fromTextTokens);
 	}
 
-	private void process(String s) {
+	public void process( InputStream is) throws IOException {
 		clear();
 		buf = new StringBuffer();
-		
-		for( char ch : s.toCharArray()) {
+
+		int b;
+		while( (b=is.read())!=-1) {
 			try {
-				process(ch);
+				process( (char)b);
 			} catch (Exception e) {
-				logState(ch);
+				logState( (char)b);
 				logger.error( "Error parsing template", e);
 				break;
 			}
-		}
+		}		
 		
 		wrapItUp();
 	}
@@ -141,18 +145,46 @@ public class Lexer {
 	
 	private void processText(String text) {
 		if( text.length()==0) return;
-		System.out.println("TEXT: " + text+"|");
+		callback.handleText( text);
 	}
 	
 	
 	private void processTag(Tag t) {
 		switch( t.tagdef){
 		case RENDER:
+			callback.handleRender(t.value);
+			break;
+		case EXPRESSION:
+			callback.handleVariable(t.value);
+			break;
+		case EXPRESSION_UNESCAPED:
+			callback.handleUnescapedVariable(t.value);
 			break;
 		case DECORATOR:
+			callback.handleDecoratorApplySection(t.value);
+			break;
+		case DECORATOR_START:
+			callback.handleDecoratorSectionStart(t.value);
+			break;
+		case DECORATOR_END:
+			callback.handleDecoratorSectionEnd(t.value);
+			break;
+		case DECORATOR_DEFINITION:
+			callback.handleUseDecorator(t.value);
+			break;
+		case PARTIAL: 
+			callback.handlePartial(t.value);
+			break;
+		case SECTION_START:
+			callback.handleSectionStart(t.value);
+			break;
+		case SECTION_END:
+			callback.handleSectionEnd(t.value);
+			break;
+		case SECTION_INVERSE:
+			callback.handleInvertedSectionStart(t.value);
 			break;
 		}
-		System.out.println("TAG:  " + t+"|");
 	}
 	
 	
@@ -166,11 +198,5 @@ public class Lexer {
 		logger.debug("currentTagType: "+currentTagType);
 	}
 	
-	
-	public static void main(String[] args) {
-		
-		Lexer l = new Lexer();
-		l.process( "Before [[[ in ]] after [{{asdf}}<<oooo>>");
-	}
 	
 }

@@ -33,7 +33,7 @@ public class TemplateFactory {
 	
 	private Template initTemplate( String templateName) {
 		TemplateBuilder tb = new TemplateBuilder( templateName, renderEngine, contentProvider, this);
-		Parser smp = new Parser( tb);
+		Lexer smp = new Lexer( tb);
 		
 		try {
 			InputStream is = getClass().getResourceAsStream( templateName);
@@ -42,7 +42,7 @@ public class TemplateFactory {
 				return null;
 			}
 			
-			smp.parse( templateName, is);
+			smp.process( is);
 			Template template = tb.getTemplate();
 			templates.put( templateName, template);
 			return template;
