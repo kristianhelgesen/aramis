@@ -129,6 +129,13 @@ public ArticleController( Article a) {
 }
 ```
 
+To inject both the model and the reference to the controller, add both the model and the reference to the constructor.
+```java
+public ArticleController( Article a, ArticleReference ref) {
+  ...
+}
+```
+
 
 
 

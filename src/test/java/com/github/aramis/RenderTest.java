@@ -13,6 +13,7 @@ import com.github.aramis.model.Article;
 import com.github.aramis.model.Article.ImageReference;
 import com.github.aramis.model.Image2;
 import com.github.aramis.model.Image2Controller;
+import com.github.aramis.model.Image3;
 import com.github.aramis.model.Model1;
 
 
@@ -64,12 +65,22 @@ public class RenderTest {
 		renderEngine.renderContent( baos, new Image2(), new ImageReference(), "", new HashMap<String,Object>());
 		
 		assertEquals( "<img id='image1' src='http://images/image1' />", baos.toString().trim());
+	}
 	
+	@Test
+	public void testIncludeWithControllerAndReference() throws Exception {
+		ContentProvider cp = new MockContentProvider();
+		RenderEngine renderEngine = new RenderEngine( cp);
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		renderEngine.renderContent( baos, new Image3(), new ImageReference(), "", new HashMap<String,Object>());
+		
+		assertTrue( baos.toString().contains("Image caption"));
 	}
 	
 
 	public static void main(String[] args) {
-		Image2Controller ctrl = new Image2Controller(new Image2(),new ImageReference());
+		Image2Controller ctrl = new Image2Controller(new Image2());
 		
 		Object compiledExpression = MVEL.compileExpression("src"); 
 		System.out.println( MVEL.executeExpression( compiledExpression, ctrl));
