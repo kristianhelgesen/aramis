@@ -7,13 +7,12 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 import org.junit.Test;
-import org.mvel2.MVEL;
 
 import com.github.aramis.model.Article;
 import com.github.aramis.model.Article.ImageReference;
 import com.github.aramis.model.Image2;
-import com.github.aramis.model.Image2Controller;
 import com.github.aramis.model.Image3;
+import com.github.aramis.model.Image3Reference;
 import com.github.aramis.model.Model1;
 
 
@@ -73,13 +72,20 @@ public class RenderTest {
 		RenderEngine renderEngine = new RenderEngine( cp);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		renderEngine.renderContent( baos, new Image3(), new ImageReference(), "", new HashMap<String,Object>());
+		renderEngine.renderContent( baos, new Image3(), new Image3Reference(), "", new HashMap<String,Object>());
 		
 		assertTrue( baos.toString().contains("Image caption"));
 	}
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
+		
+		@SuppressWarnings("rawtypes")
+		Class controllerClass = Class.forName( Image2.class.getName());
+		
+		System.out.println(controllerClass.getConstructors().length);
+		
+		/*
 		Image2Controller ctrl = new Image2Controller(new Image2());
 		
 		Object compiledExpression = MVEL.compileExpression("src"); 
@@ -94,7 +100,7 @@ public class RenderTest {
 			renderEngine.renderContent( baos, new Image2(), null, "", new HashMap<String,Object>());
 		}
 		System.out.println("done");
-		
+		*/
 
 	}
 	

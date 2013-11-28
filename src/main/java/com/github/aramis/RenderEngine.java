@@ -2,6 +2,7 @@ package com.github.aramis;
 
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.mvel2.MVEL;
@@ -60,7 +61,7 @@ public class RenderEngine {
 	}
 
 
-	@SuppressWarnings({"rawtypes"})
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void initController(Object content, Object reference, Context templateContext,
 			String className) {
 		
@@ -71,14 +72,32 @@ public class RenderEngine {
 		try {
 			String controllerFQName = controllerPackageName + "."+ controllerClassName;
 			Class controllerClass = Class.forName( controllerFQName);
+
+			Constructor[] constructors = controllerClass.getConstructors();
+			Constructor constructor = constructors[0];
+			if( constructors.length>1) {
+				logger.warn( "Multiple constructors found for controller "+controllerFQName+". Using the first.");
+			}
 			
-			controller = initControllerWithContentAndReference(content,	reference, controller, controllerClass);
-			if( controller==null){
-				controller = initControllerWithContent(content, controller,	controllerClass);
+			Class[] types = constructor.getParameterTypes();
+			Object[] arguments = new Object[types.length];
+			int i=0;
+			for( Class type : types) {
+				if( type.isAssignableFrom( content.getClass())){
+					arguments[i] = content;
+				}				
+				if( reference!=null && type.isAssignableFrom( reference.getClass())){
+					arguments[i] = reference;
+				}
+				if( contentProvider!=null && type.isAssignableFrom( contentProvider.getClass())){
+					arguments[i] = contentProvider;
+				}
+				if( templateFactory!=null && type.isAssignableFrom( templateFactory.getClass())){
+					arguments[i] = templateFactory;
+				}
+				i++;
 			}
-			if( controller==null) {
-				controller = controllerClass.newInstance();
-			}
+			controller = constructor.newInstance(arguments);
 			
 		} catch (ClassNotFoundException e) {
 			logger.info( "No controller ({}) found in package {} for model class {} ", controllerClassName, controllerPackageName, className);
@@ -90,40 +109,14 @@ public class RenderEngine {
 			logger.error("Error instantiating class",e);
 		} catch (IllegalArgumentException e) {
 			logger.error("Error instantiating class",e);
+		} catch (InvocationTargetException e) {
+			logger.error("Error instantiating class",e);
 		}
 		
 		templateContext.setController( controller);
 	}
 
-	@SuppressWarnings({"rawtypes","unchecked"})
-	private Object initControllerWithContent( Object content, Object controller, Class controllerClass)  {
-		try {
-			Constructor controllerContentConstructor = controllerClass.getConstructor(content.getClass());
-			if( controllerContentConstructor!=null){
-				controller = controllerContentConstructor.newInstance( content);
-			}
-			return controller;
-		} catch (Exception e) {
-			logger.debug("Error instantiating controller with content and reference",e);
-			return null;
-		}
-	}
 
-	@SuppressWarnings({"rawtypes","unchecked"})
-	private Object initControllerWithContentAndReference(Object content, Object reference, Object controller, Class controllerClass) {
-		try{
-			if( reference==null) return null;
-			Constructor controllerRefConstructor = controllerClass.getConstructor(content.getClass(),reference.getClass());
-			if( controllerRefConstructor!=null) {
-				controller = controllerRefConstructor.newInstance( content, reference);
-			}
-			return controller;
-		} catch (Exception e) {
-			logger.debug("Error instantiating controller with content and reference",e);
-			return null;
-		}
-	}
-	
 
 	private void applyValues(Context templateContext, Map<String, Object> transferValues) {
 

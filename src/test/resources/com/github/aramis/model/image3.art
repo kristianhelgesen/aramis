@@ -1,0 +1,2 @@
+<img id='{{imageID}}' src='{{src}}' />
+{{ref.caption}}
