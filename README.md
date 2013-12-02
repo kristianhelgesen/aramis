@@ -80,7 +80,7 @@ Add the aramis dependency to you pom
 		<dependency>
 		    <groupId>com.github.kristianhelgesen.aramis</groupId>
 		    <artifactId>aramis</artifactId>
-		    <version>1.0</version>
+		    <version>1.1</version>
 		</dependency>			
 ```
 
