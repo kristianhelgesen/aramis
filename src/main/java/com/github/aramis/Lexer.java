@@ -2,6 +2,8 @@ package com.github.aramis;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,12 +39,17 @@ public class Lexer {
 		searchTokens = new HashSet<Token>(fromTextTokens);
 	}
 
-	public void process( InputStream is) throws IOException {
+	public void process( InputStream is) throws IOException {		
+		process( is, Charset.forName("UTF-8"));
+	}
+	
+	public void process( InputStream is, Charset charset) throws IOException {		
 		clear();
 		buf = new StringBuffer();
+		InputStreamReader r = new InputStreamReader( is, charset);
 
 		int b;
-		while( (b=is.read())!=-1) {
+		while( (b=r.read())!=-1) {
 			try {
 				process( (char)b);
 			} catch (Exception e) {

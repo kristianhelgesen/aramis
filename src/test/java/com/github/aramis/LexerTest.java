@@ -1,8 +1,11 @@
 package com.github.aramis;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 
 import org.junit.Test;
 
@@ -34,6 +37,34 @@ public class LexerTest {
 		assertEquals( 1, template.getRenderInsturctions().size());
 		
 	}
+	
+	
+	@Test
+	public void testUTF8() throws Exception {
+		String templateOutput = parseTestWithEncoding( "æøå", Charset.forName("UTF-8"));
+		assertEquals( "æøå", templateOutput);
+	}
+	
+	@Test
+	public void testFailWithWrongEncoding() throws Exception {
+		String templateOutput = parseTestWithEncoding( "æøå", Charset.forName("ISO-8859-1"));
+		assertNotSame( "æøå", templateOutput);
+	}
+	
+	
+	private String parseTestWithEncoding( String text, Charset cs) throws Exception{
+		TemplateBuilder tb = new TemplateBuilder( "test", null, null, null);
+		Lexer smp = new Lexer(tb);
+		smp.process( new ByteArrayInputStream(text.getBytes()), cs);
+		
+		Template template = tb.getTemplate();
+		assertEquals( 1, template.getRenderInsturctions().size());
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		template.apply( baos, null);
+		return new String( baos.toByteArray());
+	}
+
 	
 	
 	@Test
