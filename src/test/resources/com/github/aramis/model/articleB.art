@@ -1,0 +1,11 @@
+{{ title }}
+
+
+{{! image returns article.getImage() }}
+[[ image | width:255 ]]
+
+
+
+{{ body }}
+
+

@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.github.aramis.model.Article;
 import com.github.aramis.model.Article.ImageReference;
+import com.github.aramis.model.ArticleB;
 import com.github.aramis.model.Image2;
 import com.github.aramis.model.Image3;
 import com.github.aramis.model.Image3Reference;
@@ -76,33 +77,22 @@ public class RenderTest {
 		
 		assertTrue( baos.toString().contains("Image caption"));
 	}
-	
 
-	public static void main(String[] args) throws Exception{
-		
-		@SuppressWarnings("rawtypes")
-		Class controllerClass = Class.forName( Image2.class.getName());
-		
-		System.out.println(controllerClass.getConstructors().length);
-		
-		/*
-		Image2Controller ctrl = new Image2Controller(new Image2());
-		
-		Object compiledExpression = MVEL.compileExpression("src"); 
-		System.out.println( MVEL.executeExpression( compiledExpression, ctrl));
-		
+	@Test
+	public void testIncludeWithControllerAndValue() throws Exception {
 		ContentProvider cp = new MockContentProvider();
 		RenderEngine renderEngine = new RenderEngine( cp);
 
-		System.out.println("start");
-		for( int i=0; i<100000; i++){
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			renderEngine.renderContent( baos, new Image2(), null, "", new HashMap<String,Object>());
-		}
-		System.out.println("done");
-		*/
-
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		renderEngine.renderContent( baos, new ArticleB(), null, "", new HashMap<String,Object>());
+		
+		String result = baos.toString().trim();
+		result = result.substring(result.indexOf("src='")+5);
+		result = result.substring(0, result.indexOf("'"));
+		
+		assertEquals( "http://images/image1?w=200", result);
 	}
+	
 	
 	
 }
