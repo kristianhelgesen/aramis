@@ -86,18 +86,31 @@ public class RenderEngine {
 			for( Class type : types) {
 				if( type.isAssignableFrom( content.getClass())){
 					arguments[i] = content;
-				}				
+				}		
+				else
 				if( reference!=null && type.isAssignableFrom( reference.getClass())){
 					arguments[i] = reference;
 				}
+				else
 				if( contentProvider!=null && type.isAssignableFrom( contentProvider.getClass())){
 					arguments[i] = contentProvider;
 				}
+				else
 				if( templateFactory!=null && type.isAssignableFrom( templateFactory.getClass())){
 					arguments[i] = templateFactory;
 				}
+				else{
+					logger.error("No class available for injection in constructor argument "+types[i].getName()+" in controller "+controllerFQName+
+							"\nThe only available classes for constructor injection are: " +
+							"\n - " + (content!=null?content.getClass().getCanonicalName():"") +
+							"\n - " + (reference!=null?reference.getClass().getCanonicalName():"") +
+							"\n - " + (contentProvider!=null?contentProvider.getClass().getCanonicalName():"") +
+							"\n - " + (templateFactory!=null?templateFactory.getClass().getCanonicalName():"")
+							);
+				}
 				i++;
 			}
+			
 			controller = constructor.newInstance(arguments);
 			
 		} catch (ClassNotFoundException e) {

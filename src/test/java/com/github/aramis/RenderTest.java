@@ -90,7 +90,7 @@ public class RenderTest {
 		result = result.substring(result.indexOf("src='")+5);
 		result = result.substring(0, result.indexOf("'"));
 		
-		assertEquals( "http://images/image1?w=200", result);
+		assertEquals( "http://images/image1?w=255", result);
 	}
 	
 	
