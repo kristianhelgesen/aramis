@@ -1,6 +1,7 @@
 package com.github.aramis;
 
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -125,7 +126,8 @@ public class RenderEngine {
 			
 			if( templateContext.getController()!=null) {
 				try{
-					MVEL.executeExpression( transferProperty, templateContext.getController());
+					Serializable keyExpression = MVEL.compileSetExpression(transferProperty);
+					MVEL.executeSetExpression( keyExpression, templateContext.getController(), tv.getValue());
 					continue;
 				}
 				catch( Exception e){

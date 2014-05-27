@@ -2,6 +2,7 @@ package com.github.aramis.renderinstruction;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,10 +49,6 @@ public class TemplateRenderInstruction implements RenderInstruction {
 		}
 		
 		for( String part : parameters.split(",")){
-			
-			// TODO: Use MVEL to parse setters as well? setter = value 
-			// eller noe ala: JSON.parse("{" + description + "}");
-			
 			String[] parts = part.split(":");
 			
 			String key = parts[0].trim();
