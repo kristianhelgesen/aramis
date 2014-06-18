@@ -50,7 +50,7 @@ class Util {
 			return MVEL.executeExpression( compiledExpression, context);
 		}
 		catch( Exception e){
-			logger.debug("", e);
+			logger.debug("Tried evaluating "+compiledExpression.toString()+"\n"+e.getMessage());
 			return null;
 		}
 	}

@@ -28,6 +28,10 @@ public class RenderEngine {
 	
 	public void render ( OutputStream os, Object reference, String perspective, Map<String,Object> transferValues){
 		Object content = contentProvider.getContent( reference);
+		if( content==null) {
+			logger.debug("Rendering of content skipped, content not found from reference "+reference);
+			return;
+		}
 		renderContent( os, content, reference, perspective, transferValues);
 	}
 
@@ -152,6 +156,10 @@ public class RenderEngine {
 
 		}
 		
+	}
+
+	public TemplateFactory getTemplateFactory() {
+		return templateFactory;
 	}
 
 	

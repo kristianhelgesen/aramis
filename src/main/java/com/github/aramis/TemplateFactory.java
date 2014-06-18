@@ -14,6 +14,7 @@ public class TemplateFactory {
 	Map<String, Template> templates = new HashMap<String, Template>();
 	ContentProvider contentProvider;
 	RenderEngine renderEngine;
+	boolean uncachedTemplateMode = false;
 	
 	public TemplateFactory() {	
 	}
@@ -25,7 +26,7 @@ public class TemplateFactory {
 	
 	public Template getTemplate( String templateName) {
 		Template template = templates.get( templateName);
-		if( template==null) {
+		if( template==null || uncachedTemplateMode) {
 			template = initTemplate( templateName);
 		}
 		return template;
@@ -51,5 +52,15 @@ public class TemplateFactory {
 			return null;
 		}
 	}
+
+	public boolean isUncachedTemplateMode() {
+		return uncachedTemplateMode;
+	}
+
+	public void setUncachedTemplateMode(boolean uncachedTemplateMode) {
+		this.uncachedTemplateMode = uncachedTemplateMode;
+	}
+	
+	
 
 }
