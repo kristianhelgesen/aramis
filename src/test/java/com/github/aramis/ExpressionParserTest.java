@@ -15,9 +15,12 @@ public class ExpressionParserTest {
         JexlEngine jexl = new JexlEngine();
         Expression e = jexl.createExpression( "b.c" );
 
-        JexlContext jc = new ObjectContext<A>(jexl, new A());
+        A a = new A();
+        
+        @SuppressWarnings("rawtypes")
+		JexlContext jc = new ObjectContext(jexl, a);
         Object o = e.evaluate(jc);
-        assertEquals(o,"ccc");
+        assertEquals(o,a.b.c);
 	}
 	
 	
