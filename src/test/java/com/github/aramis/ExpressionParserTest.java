@@ -35,7 +35,7 @@ public class ExpressionParserTest {
 		aramisContext.getParameters().put("idtest", "image1");
 		
         JexlEngine jexl = new JexlEngine();
-		Expression e = jexl.createExpression("idtest!=imageID?'same':'not same'"); 
+		Expression e = jexl.createExpression("idtest == imageID?'same':'not same'"); 
 		JexlContext jc = new DelegatingJexlContext(aramisContext, jexl);
         Object o = e.evaluate(jc);
 		
