@@ -9,6 +9,7 @@ import org.apache.commons.jexl2.ObjectContext;
 import org.junit.Test;
 
 import com.github.aramis.el.DelegatingJexlContext;
+import com.github.aramis.el.Evaluator;
 import com.github.aramis.model.Image2;
 
 public class ExpressionParserTest {
@@ -34,11 +35,7 @@ public class ExpressionParserTest {
 		aramisContext.setModel(new Image2());
 		aramisContext.getParameters().put("idtest", "image1");
 		
-        JexlEngine jexl = new JexlEngine();
-		Expression e = jexl.createExpression("idtest == imageID?'same':'not same'"); 
-		JexlContext jc = new DelegatingJexlContext(aramisContext, jexl);
-        Object o = e.evaluate(jc);
-		
+		Object o = Evaluator.lookup("idtest == imageID?'same':'not same'", aramisContext);
 		assertEquals("same",o);
 	}
 	
