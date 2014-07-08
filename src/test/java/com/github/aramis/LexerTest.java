@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 import org.junit.Test;
 
 import com.github.aramis.renderinstruction.DecoratorRenderInstruction;
-import com.github.aramis.renderinstruction.MvelRenderInstruction;
+import com.github.aramis.renderinstruction.ExpressionRenderInstruction;
 import com.github.aramis.renderinstruction.RenderInstruction;
 import com.github.aramis.renderinstruction.TemplateRenderInstruction;
 import com.github.aramis.renderinstruction.TextRenderInstruction;
@@ -158,7 +158,7 @@ public class LexerTest {
 		Template template = tb.getTemplate();
 
 		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(0).getClass());
-		assertEquals( MvelRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
+		assertEquals( ExpressionRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
 	}
 	
 	@Test
@@ -175,7 +175,7 @@ public class LexerTest {
 		Template template = tb.getTemplate();
 
 		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(0).getClass());
-		assertEquals( MvelRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
+		assertEquals( ExpressionRenderInstruction.class, template.getRenderInsturctions().get(1).getClass());
 		assertEquals( TextRenderInstruction.class, template.getRenderInsturctions().get(2).getClass());
 		assertEquals( "TextRenderInstruction([)", template.getRenderInsturctions().get(2).toString());
 	}

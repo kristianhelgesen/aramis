@@ -103,6 +103,10 @@ public class RenderEngine {
 				if( templateFactory!=null && type.isAssignableFrom( templateFactory.getClass())){
 					arguments[i] = templateFactory;
 				}
+				else
+				if( templateFactory!=null && type.isAssignableFrom( templateContext.getClass())){
+					arguments[i] = templateContext;
+				}
 				else{
 					logger.error("No class available for injection in constructor argument "+types[i].getName()+" in controller "+controllerFQName+
 							"\nThe only available classes for constructor injection are: " +

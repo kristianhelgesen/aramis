@@ -2,7 +2,6 @@ package com.github.aramis.renderinstruction;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +71,7 @@ public class TemplateRenderInstruction implements RenderInstruction {
 			String targetProperty = entry.getKey();
 			Object targetExpression = entry.getValue();
 			
-			Object targetObj = MVEL.executeExpression( targetExpression, context);
+			Object targetObj = Util.lookupProperty( targetExpression, context);
 			transferValues.put( targetProperty, targetObj);
 		}
 		

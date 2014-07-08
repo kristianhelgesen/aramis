@@ -4,6 +4,7 @@ public class Tag {
 	enum TagType {
 		
 		RENDER( 				"[[", 	"]]"),
+		RENDERPARTIAL( 			"[[>", 	"]]"),
 		DECORATOR( 				"<<", 	">>"),
 		DECORATOR_DEFINITION( 	"<<<", 	">>>"),
 		DECORATOR_START( 		"<<#", 	">>"),

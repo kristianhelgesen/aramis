@@ -7,11 +7,13 @@ import org.slf4j.LoggerFactory;
 
 import com.github.aramis.Context;
 
-class Util {
+public class Util {
 	
 	private static final Logger logger = LoggerFactory.getLogger( Util.class);
 	
-	static Object lookupProperty( Object compiledExpression, Context context) {
+	
+	
+	public static Object lookupProperty( Object compiledExpression, Context context) {
 		
 		Object property = null;
 		Context rootContext = context;
@@ -45,7 +47,7 @@ class Util {
 		return property;
 	}
 	
-	static private Object executeExpression( Object compiledExpression, Object context) {
+	private static Object executeExpression( Object compiledExpression, Object context) {
 		try{
 			return MVEL.executeExpression( compiledExpression, context);
 		}
@@ -54,4 +56,5 @@ class Util {
 			return null;
 		}
 	}
+	
 }

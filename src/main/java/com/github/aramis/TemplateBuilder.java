@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.aramis.renderinstruction.DecoratorRenderInstruction;
-import com.github.aramis.renderinstruction.MvelRenderInstruction;
+import com.github.aramis.renderinstruction.ExpressionRenderInstruction;
 import com.github.aramis.renderinstruction.RenderInstruction;
 import com.github.aramis.renderinstruction.RenderInstructionContainer;
 import com.github.aramis.renderinstruction.SectionInvRenderInstruction;
@@ -37,11 +37,11 @@ public class TemplateBuilder implements ParserCallback{
 
 	
 	public void handleUnescapedVariable(String var) {
-		addRenderInstruction( new MvelRenderInstruction( var, false));
+		addRenderInstruction( new ExpressionRenderInstruction( var, false));
 	}
 
 	public void handleVariable(String var) {
-		addRenderInstruction( new MvelRenderInstruction( var));
+		addRenderInstruction( new ExpressionRenderInstruction( var));
 	}
 
 	public void handleText(String text) {

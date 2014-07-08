@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.github.aramis.Context;
 import com.github.aramis.Template;
 import com.github.aramis.model.Model1;
-import com.github.aramis.renderinstruction.MvelRenderInstruction;
+import com.github.aramis.renderinstruction.ExpressionRenderInstruction;
 
 
 public class TemplateTest {
@@ -21,8 +21,8 @@ public class TemplateTest {
 	public void testExpression() throws Exception{
 	
 		Template t = new Template("test");
-		t.addRenderInstruction( new MvelRenderInstruction( "m1"), null);
-		t.addRenderInstruction( new MvelRenderInstruction( "m2"), null);
+		t.addRenderInstruction( new ExpressionRenderInstruction( "m1"), null);
+		t.addRenderInstruction( new ExpressionRenderInstruction( "m2"), null);
 		
 		Context root = new Context();
 		Context section1 = new Context(root);

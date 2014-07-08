@@ -12,19 +12,19 @@ import org.slf4j.LoggerFactory;
 
 import com.github.aramis.Context;
 
-public class MvelRenderInstruction implements RenderInstruction {
+public class ExpressionRenderInstruction implements RenderInstruction {
 	
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger( MvelRenderInstruction.class);
+	private static final Logger logger = LoggerFactory.getLogger( ExpressionRenderInstruction.class);
 	
 	Object compiledExpression; 
 	boolean escape;
 	
-	public MvelRenderInstruction( String expression) {
+	public ExpressionRenderInstruction( String expression) {
 		this(expression, true);
 	}
 
-	public MvelRenderInstruction( String expression, boolean escape) {
+	public ExpressionRenderInstruction( String expression, boolean escape) {
 		compiledExpression = MVEL.compileExpression(expression); 
 		this.escape = escape;
 	}
