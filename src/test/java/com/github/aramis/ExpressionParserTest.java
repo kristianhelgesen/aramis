@@ -8,7 +8,6 @@ import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.ObjectContext;
 import org.junit.Test;
 
-import com.github.aramis.el.DelegatingJexlContext;
 import com.github.aramis.el.Evaluator;
 import com.github.aramis.model.Image2;
 
